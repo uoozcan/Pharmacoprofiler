@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+.next/
+dist/
+coverage/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS and editors
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Secrets and local env
+.env
+.env.*
+secrets.*
+
+# Data and model artifacts
+data/raw/**
+data/interim/**
+data/processed/**
+models/trained/**
+*.parquet
+*.feather
+*.h5
+*.hdf5
+*.pt
+*.pth
+*.joblib
+*.pkl
+
+# Temporary manuscript and Office artifacts
+~$*.docx
+~$*.pptx
+*AutoRecovered*
+*:Zone.Identifier
+
+# Build outputs
+site/
+.coverage
+htmlcov/

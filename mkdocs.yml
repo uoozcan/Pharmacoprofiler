@@ -1,0 +1,31 @@
+site_name: Pharmacoprofiler Docs
+site_description: Documentation for the Pharmacoprofiler platform, data harmonization workflow, and manuscript support materials
+site_url: https://<org>.github.io/pharmacoprofiler/
+repo_url: https://github.com/<org>/pharmacoprofiler
+theme:
+  name: material
+nav:
+  - Home: index.md
+  - Architecture:
+      - Overview: architecture/overview.md
+      - Technical Specification: architecture/technical-specification.md
+  - User Guide:
+      - Platform Overview: user-guide/platform-overview.md
+      - Core Workflows: user-guide/core-workflows.md
+  - Developer Guide:
+      - Local Setup: developer-guide/local-setup.md
+      - Repository Conventions: developer-guide/repository-conventions.md
+  - API:
+      - Prediction API: api/prediction-api.md
+      - Data Query API: api/data-query-api.md
+  - Datasets:
+      - Data Sources: datasets/data-sources.md
+      - Harmonization: datasets/harmonization.md
+  - Operations:
+      - Release and Sustainability: operations/release-and-sustainability.md
+  - Research:
+      - Overview: research/README.md
+      - Manuscript Status: research/manuscript/manuscript-status.md
+      - Methods Rewrite Spec: research/manuscript/methods-rewrite-spec.md
+      - Issue Analysis Plan: research/reviewer-responses/issue-analysis-and-resolution-plan.md
+      - Reviewer Response Matrix: research/reviewer-responses/reviewer-response-matrix.md

@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+title: "Pharmacoprofiler"
+message: "If you use this repository, please cite the software and the associated manuscript."
+type: software
+authors:
+  - family-names: "Ozcan"
+    given-names: "Umut"
+repository-code: "https://github.com/<org>/pharmacoprofiler"
+url: "https://pharmacoprofiler.com"
+license: "Apache-2.0"
+abstract: "A pharmacogenomics platform for harmonizing drug response datasets, exploring network relationships, and serving AI-assisted pIC50 predictions."
+keywords:
+  - pharmacogenomics
+  - cancer cell lines
+  - drug response prediction
+  - pIC50
+  - data harmonization
