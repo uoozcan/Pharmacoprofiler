@@ -9,6 +9,7 @@ nav:
   - Architecture:
       - Overview: architecture/overview.md
       - Technical Specification: architecture/technical-specification.md
+      - Legacy Predictor Architecture: architecture/legacy-predictor-architecture.md
   - User Guide:
       - Platform Overview: user-guide/platform-overview.md
       - Core Workflows: user-guide/core-workflows.md
@@ -17,6 +18,7 @@ nav:
       - Repository Conventions: developer-guide/repository-conventions.md
   - API:
       - Prediction API: api/prediction-api.md
+      - Legacy pIC50 Service: api/legacy-pic50-service.md
       - Data Query API: api/data-query-api.md
   - Datasets:
       - Data Sources: datasets/data-sources.md
@@ -25,7 +27,18 @@ nav:
       - Release and Sustainability: operations/release-and-sustainability.md
   - Research:
       - Overview: research/README.md
+      - Implemented Scope Analysis: research/legacy/implemented-scope-analysis.md
+      - Legacy Modeling Inventory: research/legacy/modeling-inventory.md
+      - Competitive Positioning: research/legacy/competitive-positioning.md
+      - Notebook Provenance: research/notebooks/notebook-provenance.md
+      - Innovation Report: research/legacy/innovation-report.md
       - Manuscript Status: research/manuscript/manuscript-status.md
+      - Canonical Manuscript Draft: research/manuscript/canonical-manuscript-draft.md
+      - Methods Verified Baseline: research/manuscript/methods-verified-baseline.md
       - Methods Rewrite Spec: research/manuscript/methods-rewrite-spec.md
+      - Benchmark Reproducibility Baseline: research/supplementary/benchmark-reproducibility-baseline.md
+      - Benchmark Input Reconstruction: research/supplementary/benchmark-input-reconstruction.md
+      - Baseline Benchmark Interpretation: research/supplementary/benchmark-baseline-interpretation.md
+      - Service Analysis Baseline: research/supplementary/service-analysis-baseline.md
       - Issue Analysis Plan: research/reviewer-responses/issue-analysis-and-resolution-plan.md
       - Reviewer Response Matrix: research/reviewer-responses/reviewer-response-matrix.md

@@ -38,4 +38,6 @@ Pharmacoprofiler should operate as a multi-component platform with clear separat
 
 ## Current Gap
 
-The current repository does not yet contain the actual frontend, backend, or inference code. This documentation defines the intended boundaries so that imported code can be placed without ambiguity.
+The current repository does not yet contain the actual frontend or backend application code. It does now contain a maintained baseline inference service in `services/prediction-api/` and a preserved legacy copy in `services/prediction-api/legacy_verified/`.
+
+The verified legacy inference-service baseline is documented in [legacy-predictor-architecture.md](legacy-predictor-architecture.md) and preserved under `services/prediction-api/legacy_verified/`.

@@ -1,0 +1,45 @@
+{
+  "benchmark_name": "legacy_pic50_cross_domain_baseline",
+  "description": "Canonical current-repo benchmark configuration for the verified legacy GDSC-to-CCLE pIC50 baseline.",
+  "run_timestamp_utc": "2026-04-01T12:12:14.284256+00:00",
+  "lineage_note": "The legacy training script writes a v3 joblib, while the verified deployed service uses a v4 joblib with the same documented feature schema.",
+  "artifacts": {
+    "omics_matrix": "/home/umut/projects/pharmacoprofiler_legacy/CLRB_MODELLING/GDSC_extracted_988_cell_lines_L1000_common_genes_3747_feature_vector_v1_selected_common_3_platform_v2.txt",
+    "cell_line_metadata": "/home/umut/projects/pharmacoprofiler_legacy/CLRB_MODELLING/GDSC_988_cell_line_name_main_fix_RRID_v1.txt",
+    "trained_model": "/home/umut/projects/pharmacoprofiler_legacy/CLRB_MODELLING/pharmacoprofiler_docker/pharmacoprofiler/huggingface_profile/GDSC_CCLE_cross_domain_mode_7_v4.joblib"
+  },
+  "inputs": {
+    "gdsc_response_path": "/home/umut/projects/pharmacoprofiler_legacy/CLRB_MODELLING/GDSC_drug_response_drugs_w_smiles_988cl_404dr_337K_v4_w_fps.txt",
+    "ccle_vector_path": "/home/umut/projects/pharmacoprofiler_legacy/CLRB_MODELLING/CCLE_extracted_503_cell_lines_L1000_common_genes_3747_feature_vector_v1_selected_common_3_platform_v2.txt",
+    "ccle_response_source": {
+      "source_mode": "reconstructed_from_raw",
+      "source_path": "/home/umut/projects/pharmacoprofiler_legacy/Cellminer/CCLE/CCLE_actual_drug_response_v1.txt",
+      "reconstructed": true,
+      "raw_rows": 11273,
+      "reconstructed_rows": 6513,
+      "unique_drugs_after_mapping": 16,
+      "unique_cell_lines_after_mapping": 434
+    }
+  },
+  "split_policy": {
+    "train_domain": "GDSC",
+    "test_domain": "CCLE",
+    "model_family": "RandomForestRegressor",
+    "feature_schema_version": "omics_3747_plus_ecfp4_1024_v1"
+  },
+  "dataset_summary": {
+    "gdsc_rows": 337761,
+    "ccle_vector_cell_lines": 503,
+    "evaluated_ccle_rows": 6513,
+    "evaluated_ccle_drugs": 16,
+    "evaluated_ccle_cell_lines": 434
+  },
+  "metrics": {
+    "mae": 0.6548279631114848,
+    "mse": 0.6991376464048678,
+    "rmse": 0.8361445128713504,
+    "spearman_r": 0.6272654831115683,
+    "pearson_r": 0.7556227167910132,
+    "r_squared": 0.26325317726173836
+  }
+}

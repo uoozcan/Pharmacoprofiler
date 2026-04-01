@@ -15,7 +15,7 @@ This repository was restructured from a manuscript-first workspace into a monore
 - manuscript and reviewer materials
 - archived legacy drafts
 
-The application source code is not yet imported into this repository. The current foundation is intended to support that import cleanly.
+The web application source code is not yet imported into this repository. The prediction service baseline is now represented directly under `services/prediction-api/`, while the original Hugging Face-aligned service files remain preserved under `services/prediction-api/legacy_verified/`.
 
 ## Repository Layout
 
@@ -40,19 +40,24 @@ The application source code is not yet imported into this repository. The curren
 1. Read the project overview in [docs/index.md](docs/index.md).
 2. Review the architecture in [docs/architecture/overview.md](docs/architecture/overview.md).
 3. Review manuscript and reviewer materials in [docs/research/README.md](docs/research/README.md).
-4. Import the web frontend, backend, and prediction service source trees into:
+4. Import the web frontend and backend source trees into:
    - `app/frontend/`
    - `app/backend/`
-   - `services/prediction-api/`
+5. Run the benchmark foundation steps:
+   - `python3 scripts/evaluate/benchmark_reproducibility_check.py`
+   - `python3 scripts/evaluate/run_legacy_benchmark_baseline.py`
 
 ## Documentation
 
 - User documentation: [docs/user-guide/platform-overview.md](docs/user-guide/platform-overview.md)
 - Developer documentation: [docs/developer-guide/local-setup.md](docs/developer-guide/local-setup.md)
 - API documentation: [docs/api/prediction-api.md](docs/api/prediction-api.md)
+- Verified legacy API baseline: [docs/api/legacy-pic50-service.md](docs/api/legacy-pic50-service.md)
+- Benchmark reproducibility baseline: [docs/research/supplementary/benchmark-reproducibility-baseline.md](docs/research/supplementary/benchmark-reproducibility-baseline.md)
 - Dataset documentation: [docs/datasets/data-sources.md](docs/datasets/data-sources.md)
 - Operations and release process: [docs/operations/release-and-sustainability.md](docs/operations/release-and-sustainability.md)
 - Manuscript hardening and reviewer responses: [docs/research/README.md](docs/research/README.md)
+- Legacy implementation analysis: [docs/research/legacy/implemented-scope-analysis.md](docs/research/legacy/implemented-scope-analysis.md)
 
 ## Data Provenance
 
@@ -76,6 +81,12 @@ The repository includes CI placeholders for:
 - backend tests
 - frontend tests
 - prediction service smoke tests
+
+The benchmark package currently requires a Python environment with `joblib` and `scikit-learn`. The default shell in this workspace does not provide those packages.
+
+## Legacy Predictor Import
+
+The verified legacy Hugging Face prediction service has been preserved as an import target under `services/prediction-api/legacy_verified/`. The large model artifacts remain external for now and are documented in the service notes rather than copied into the repository.
 
 ## Contributing
 

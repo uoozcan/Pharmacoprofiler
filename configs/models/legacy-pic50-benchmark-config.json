@@ -1,0 +1,16 @@
+{
+  "benchmark_name": "legacy_pic50_cross_domain_baseline",
+  "description": "Canonical current-repo benchmark configuration for the verified legacy GDSC-to-CCLE pIC50 baseline.",
+  "legacy_root": "/home/umut/projects/pharmacoprofiler_legacy/CLRB_MODELLING",
+  "artifact_manifest": "configs/models/legacy-pic50-artifacts.json",
+  "output_dir": "models/evaluation/legacy_pic50_baseline",
+  "gdsc_response_path": "GDSC_drug_response_drugs_w_smiles_988cl_404dr_337K_v4_w_fps.txt",
+  "ccle_vector_path": "CCLE_extracted_503_cell_lines_L1000_common_genes_3747_feature_vector_v1_selected_common_3_platform_v2.txt",
+  "prepared_ccle_response_path": "CCLE_drug_response_df_for_cross_domain_v3.txt",
+  "raw_ccle_response_path": "../Cellminer/CCLE/CCLE_actual_drug_response_v1.txt",
+  "feature_schema_version": "omics_3747_plus_ecfp4_1024_v1",
+  "target_column": "pIC50",
+  "raw_target_column": "VALUES",
+  "model_family": "RandomForestRegressor",
+  "lineage_note": "The legacy training script writes a v3 joblib, while the verified deployed service uses a v4 joblib with the same documented feature schema."
+}

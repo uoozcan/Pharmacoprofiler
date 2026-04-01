@@ -6,7 +6,7 @@
 | --- | --- | --- | --- |
 | Repository foundation | No software repository structure | Legacy root contained manuscript assets only | Root scaffold, governance files, CI placeholders |
 | Methods rigor | Technical details insufficient for reproducibility | `issues_v1.docx`, reviewer comments | `docs/research/manuscript/methods-rewrite-spec.md` |
-| Benchmarking | Claims lack context and metrics | Reviewer 1, issue log | `docs/research/supplementary/benchmarking-plan.md` |
+| Benchmarking | Claims lack context and metrics | Reviewer 1, issue log | `models/evaluation/legacy_pic50_baseline/metrics.tsv`, `models/evaluation/legacy_pic50_baseline/benchmark_summary.json`, `docs/research/supplementary/benchmark-baseline-interpretation.md` |
 | Data harmonization | Mapping strategy poorly documented | `issues_v1.docx`, Reviewer 1 and 2 | `docs/datasets/harmonization.md` |
 | Comparative positioning | Weak distinction from existing tools | Issue log, Reviewer 2 | `docs/research/supplementary/platform-comparison-plan.md` |
 | Platform documentation | Architecture and workflows undocumented | Reviewer 3 | `docs/architecture/overview.md`, `docs/user-guide/` |

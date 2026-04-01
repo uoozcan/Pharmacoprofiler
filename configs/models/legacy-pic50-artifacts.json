@@ -1,0 +1,31 @@
+{
+  "artifact_set": "legacy_pic50_service_baseline",
+  "description": "Verified legacy PharmacoProfiler prediction-service runtime assets",
+  "source_root": "/home/umut/projects/pharmacoprofiler_legacy/CLRB_MODELLING",
+  "artifacts": [
+    {
+      "name": "omics_matrix",
+      "relative_dir": ".",
+      "filename": "GDSC_extracted_988_cell_lines_L1000_common_genes_3747_feature_vector_v1_selected_common_3_platform_v2.txt",
+      "size_bytes": 40061487,
+      "sha256": "fe40965ae3d66fc7f706c7e38eb0a82b3bf42578f5b0edafeeb450289e353a97",
+      "verified_role": "988-cell-line omics feature matrix with 3747 numeric features plus CELL_LINE_NAME"
+    },
+    {
+      "name": "cell_line_metadata",
+      "relative_dir": ".",
+      "filename": "GDSC_988_cell_line_name_main_fix_RRID_v1.txt",
+      "size_bytes": 36913,
+      "sha256": "87adf390014b5a9e16aa8d2ce1c3269c595417977212f13ff8d98f665bebf4b4",
+      "verified_role": "canonical cell line name, RRID, and tissue mapping table"
+    },
+    {
+      "name": "trained_model",
+      "relative_dir": "pharmacoprofiler_docker/pharmacoprofiler/huggingface_profile",
+      "filename": "GDSC_CCLE_cross_domain_mode_7_v4.joblib",
+      "size_bytes": 497166867,
+      "sha256": "4058dfd341dd3b713da0885a9fe4e3f1b25ace0518fa900705cb8f48ef49bcf5",
+      "verified_role": "deployed Random Forest pIC50 prediction model"
+    }
+  ]
+}

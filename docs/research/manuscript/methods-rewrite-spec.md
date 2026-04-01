@@ -32,6 +32,8 @@ The Methods section must be rewritten from verified implementation details only.
 - hyperparameter search strategy
 - baseline models
 - performance metrics and confidence intervals
+- exact script or package entrypoint used to generate reported metrics
+- artifact checksum or version references for the runtime asset set
 
 ### Web and service implementation
 - actual frontend framework
@@ -45,3 +47,5 @@ The Methods section must be rewritten from verified implementation details only.
 - placeholder framework names
 - generic textbook paragraphs that are not tied to implementation
 - claims of clinical translation beyond available evidence
+- invented preprocessing details that are not yet verified from code
+- placeholder benchmark values in manuscript-ready sections

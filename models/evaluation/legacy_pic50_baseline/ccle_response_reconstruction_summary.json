@@ -1,0 +1,28 @@
+{
+  "raw_rows": 11273,
+  "reconstructed_rows": 6513,
+  "raw_unique_drugs": 24,
+  "reconstructed_unique_drugs": 16,
+  "raw_unique_cell_lines": 492,
+  "reconstructed_unique_cell_lines": 434,
+  "gdsc_unique_drugs": 404,
+  "ccle_vector_cell_lines": 503,
+  "mapped_drugs": [
+    "crizotinib",
+    "erlotinib",
+    "irinotecan",
+    "lapatinib",
+    "nilotinib",
+    "paclitaxel",
+    "palbociclib",
+    "panobinostat",
+    "pd0325901",
+    "pha665752",
+    "plx4720",
+    "saracatinib",
+    "selumetinib",
+    "sorafenib",
+    "tanespimycin",
+    "topotecan"
+  ]
+}
