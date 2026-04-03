@@ -23,12 +23,22 @@ Do not treat the top-level service directory as implemented until the legacy cod
 
 This directory now includes a current-repo baseline implementation:
 - `app.py`: Flask entrypoint
-- `predictor.py`: asset loading and prediction logic
+- `predictor.py`: asset loading, feature construction, and batch prediction logic
 - `requirements.txt`: runtime dependencies
 - `smoke_test.py`: minimal service check
 - `assets/README.md`: asset placement instructions
 
 The top-level implementation preserves the verified legacy API behavior while making asset paths explicit and allowing the service to start in a degraded mode when large runtime artifacts are not yet present locally.
+
+## Hugging Face Space Sync
+
+The GitHub repo is the source of truth for the maintained prediction service. For the public Hugging Face Space:
+
+- sync `app.py`, `predictor.py`, and `requirements.txt` from this directory
+- copy `HF_SPACE_Dockerfile` to the Space root as `Dockerfile`
+- copy `HF_SPACE_README.md` to the Space root as `README.md`
+
+This keeps the public Space aligned with the maintained Flask/Docker baseline rather than the older `legacy_verified/` snapshot.
 
 ## Running the Service
 
@@ -40,12 +50,26 @@ The top-level implementation preserves the verified legacy API behavior while ma
 python3 app.py
 ```
 
+The maintained HTTP surface is:
+
+- `POST /api/predict`
+- `POST /api/predict/single`
+- `GET /api/health`
+- `GET /api/info`
+
 ## Current Runtime Behavior
 
 - if required Python dependencies are missing, the service imports cleanly but reports degraded status
 - if required model assets are missing, `/api/health` and `/api/info` return `503` with asset details
 - if assets are present, the service preserves the legacy grouped SMILES prediction flow
+- `app.py` owns request parsing, response codes, and route definitions
+- `predictor.py` owns asset loading, fingerprint generation, feature assembly, and batch prediction
 
 ## Service Tests
 
-The current service contract tests live in `tests/api/test_prediction_api_contract.py`.
+Contract and smoke tests:
+
+- `python3 -m unittest tests.api.test_prediction_api_contract`
+- `python3 services/prediction-api/smoke_test.py`
+
+The API contract tests are fake-predictor based and are intended to validate response behavior without requiring real model assets. The smoke test is the lightweight real-runtime check.

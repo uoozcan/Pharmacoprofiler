@@ -1,9 +1,8 @@
 from __future__ import annotations
 
+import argparse
 import json
-import re
 import os
-from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -24,20 +23,28 @@ except ModuleNotFoundError:  # pragma: no cover - environment-dependent
     mean_squared_error = None
     r2_score = None
 
-
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_CONFIG_PATH = REPO_ROOT / "configs" / "models" / "legacy-pic50-benchmark-config.json"
-
-
-@dataclass(frozen=True)
-class BenchmarkPaths:
-    legacy_root: Path
-    output_dir: Path
-    gdsc_response_path: Path
-    ccle_vector_path: Path
-    prepared_ccle_response_path: Path
-    raw_ccle_response_path: Path
-    artifact_manifest_path: Path
+try:
+    from ._common import (
+        DEFAULT_CONFIG_PATH,
+        REPO_ROOT,
+        BenchmarkPaths,
+        fingerprint_map_from_gdsc,
+        load_json,
+        require_existing,
+        resolve_benchmark_paths,
+        resolve_manifest_artifacts,
+    )
+except ImportError:
+    from _common import (
+        DEFAULT_CONFIG_PATH,
+        REPO_ROOT,
+        BenchmarkPaths,
+        fingerprint_map_from_gdsc,
+        load_json,
+        require_existing,
+        resolve_benchmark_paths,
+        resolve_manifest_artifacts,
+    )
 
 
 def require_runtime_dependencies() -> None:
@@ -53,71 +60,21 @@ def require_runtime_dependencies() -> None:
             + ". Install the service/benchmark Python dependencies and rerun."
         )
 
-
-def ensure_output_dir(preferred_path: Path) -> Path:
-    override = os.environ.get("PHARMACOPROFILER_BENCHMARK_OUTPUT_DIR")
-    if override:
-        output_dir = Path(override).expanduser().resolve()
-        output_dir.mkdir(parents=True, exist_ok=True)
-        return output_dir
-
-    try:
-        preferred_path.mkdir(parents=True, exist_ok=True)
-        return preferred_path
-    except OSError:
-        fallback_dir = Path("/tmp/pharmacoprofiler_outputs/legacy_pic50_baseline").resolve()
-        fallback_dir.mkdir(parents=True, exist_ok=True)
-        return fallback_dir
-
-
-def normalize_token(value: Any) -> str:
-    return re.sub(r"[^a-z0-9]+", "", str(value).lower())
-
-
-def load_json(path: Path) -> dict[str, Any]:
-    with path.open("r", encoding="utf-8") as handle:
-        return json.load(handle)
-
-
-def resolve_paths(config: dict[str, Any]) -> BenchmarkPaths:
-    legacy_root = Path(config["legacy_root"]).resolve()
-    return BenchmarkPaths(
-        legacy_root=legacy_root,
-        output_dir=ensure_output_dir((REPO_ROOT / config["output_dir"]).resolve()),
-        gdsc_response_path=(legacy_root / config["gdsc_response_path"]).resolve(),
-        ccle_vector_path=(legacy_root / config["ccle_vector_path"]).resolve(),
-        prepared_ccle_response_path=(legacy_root / config["prepared_ccle_response_path"]).resolve(),
-        raw_ccle_response_path=(legacy_root / config["raw_ccle_response_path"]).resolve(),
-        artifact_manifest_path=(REPO_ROOT / config["artifact_manifest"]).resolve(),
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Run the canonical legacy pIC50 baseline benchmark.")
+    parser.add_argument(
+        "--config",
+        type=Path,
+        default=DEFAULT_CONFIG_PATH,
+        help="Benchmark config JSON describing legacy inputs and output locations.",
     )
-
-
-def resolve_manifest_artifacts(manifest_path: Path) -> dict[str, Path]:
-    manifest = load_json(manifest_path)
-    source_root = Path(manifest["source_root"]).resolve()
-    resolved: dict[str, Path] = {}
-    for artifact in manifest["artifacts"]:
-        relative_dir = artifact.get("relative_dir", ".")
-        resolved[artifact["name"]] = (source_root / relative_dir / artifact["filename"]).resolve()
-    return resolved
-
-
-def require_existing(path: Path, label: str) -> None:
-    if not path.exists():
-        raise FileNotFoundError(f"Missing required {label}: {path}")
-
-
-def fingerprint_map_from_gdsc(gdsc_df: pd.DataFrame) -> dict[str, str]:
-    mapping: dict[str, str] = {}
-    for _, row in gdsc_df[["DRUG_NAME", "DRUG_NAME_edited", "FINGERPRINT"]].dropna().iterrows():
-        fingerprint = str(row["FINGERPRINT"])
-        if len(fingerprint) != 1024:
-            continue
-        for source_value in (row["DRUG_NAME"], row["DRUG_NAME_edited"]):
-            key = normalize_token(source_value)
-            if key and key not in mapping:
-                mapping[key] = fingerprint
-    return mapping
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=None,
+        help="Optional output directory override.",
+    )
+    return parser.parse_args()
 
 
 def load_or_reconstruct_ccle_response(
@@ -214,9 +171,14 @@ def write_outputs(
 
 
 def main() -> None:
+    args = parse_args()
     require_runtime_dependencies()
-    config = load_json(DEFAULT_CONFIG_PATH)
-    paths = resolve_paths(config)
+    config_path = args.config.resolve()
+    config = load_json(config_path)
+    output_override = str(args.output_dir.resolve()) if args.output_dir else os.environ.get(
+        "PHARMACOPROFILER_BENCHMARK_OUTPUT_DIR"
+    )
+    paths = resolve_benchmark_paths(config, output_dir_override=output_override)
     require_existing(paths.gdsc_response_path, "GDSC response file")
     require_existing(paths.ccle_vector_path, "CCLE omics matrix")
     require_existing(paths.artifact_manifest_path, "artifact manifest")
@@ -281,8 +243,10 @@ def main() -> None:
     reconstructed_df = ccle_response_df if response_metadata["reconstructed"] else None
     write_outputs(paths.output_dir, summary, metrics, predictions_df, reconstructed_df)
 
-    print(f"Preferred output dir: {(REPO_ROOT / config['output_dir']).resolve()}")
-    print(f"Actual output dir: {paths.output_dir}")
+    print("summary:")
+    print(f"config_path: {config_path}")
+    print(f"preferred_output_dir: {(REPO_ROOT / config['output_dir']).resolve()}")
+    print(f"output_dir: {paths.output_dir}")
     print(f"Wrote benchmark outputs to: {paths.output_dir}")
     print(json.dumps(metrics, indent=2))
 

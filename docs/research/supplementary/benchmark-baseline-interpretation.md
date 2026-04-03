@@ -26,6 +26,14 @@ The current packaged baseline run produced:
 - RMSE `0.8361`
 - R² `0.2633`
 
+Bootstrap `95%` confidence intervals (1,000 resamples) on the same run:
+
+- Pearson `0.7416` to `0.7685`
+- Spearman `0.6094` to `0.6444`
+- MAE `0.6417` to `0.6674`
+- RMSE `0.8199` to `0.8524`
+- R² `0.2309` to `0.2928`
+
 ## Evaluated dataset footprint
 
 The evaluated current-repo baseline covered:
@@ -38,6 +46,34 @@ The evaluated current-repo baseline covered:
 ## Scientific interpretation
 
 This run establishes a reproducible, code-backed baseline for the current repository. It is sufficient to replace placeholder benchmark language in the manuscript with actual generated results.
+
+Additional diagnostics from `ccle_predictions.tsv` show the current baseline is directionally useful but systematically under-calibrated:
+
+- mean signed error (`pred - true`): `-0.4943`
+- underprediction share: `85.0%`
+- overprediction share: `15.0%`
+- global calibration fit (`pred ~ true`): slope `0.7404`, intercept `1.0075`
+
+This indicates compression toward mid-range pIC50 values with a net negative bias on the reconstructed CCLE transfer set.
+
+## Subgroup behavior snapshot
+
+Drug-level spread shows non-uniform transfer quality:
+
+- strongest Pearson values include `selumetinib` (`0.3777`) and `pd0325901` (`0.3771`)
+- weakest Pearson values include `pha665752` (`-0.0408`) and `crizotinib` (`0.1062`)
+- largest MAE values include `irinotecan` (`1.6631`) and `plx4720` (`1.1725`)
+
+Tissue-level behavior is more stable but still heterogeneous:
+
+- higher Pearson examples: `stomach` (`0.8529`), `oesophagus` (`0.8271`), `ovary` (`0.8204`)
+- lower Pearson examples: `blood` (`0.5566`), `pleura` (`0.6699`), `haematopoietic_and_lymphoid_tissue` (`0.6891`)
+- normalized reporting now merges `Colon` into `Large Intestine / Colon` and collapses `Soft Tissue` with `soft_tissue`
+- worst MAE examples in normalized reporting include `small_intestine` (`0.7616`) and `bone_marrow` (`0.7598`)
+
+Representative failure mode from high-error drugs:
+
+- `paclitaxel` fit slope `0.0326` with Pearson `0.1176`, indicating very weak dynamic response tracking despite moderate global correlation.
 
 The baseline remains limited in important ways:
 

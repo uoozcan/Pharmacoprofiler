@@ -56,6 +56,12 @@ class PIC50Predictor:
         self.is_loaded = False
         self.load_error: str | None = None
 
+    @staticmethod
+    def _clean_text_value(value: Any) -> str:
+        if pd.isna(value):
+            return ""
+        return str(value)
+
     def _asset_path(self, filename: str) -> Path:
         return self.asset_dir / filename
 
@@ -81,6 +87,67 @@ class PIC50Predictor:
             "rdkit": Chem is not None and AllChem is not None,
         }
 
+    def _load_tabular_assets(self, assets: dict[str, Path]) -> tuple[pd.DataFrame, pd.DataFrame]:
+        omics_df = pd.read_csv(assets["omics_file"], delimiter="\t")
+        cell_line_df = pd.read_csv(assets["cell_line_file"], delimiter="\t")
+        return omics_df, cell_line_df
+
+    def _build_cell_line_metadata(self, cell_line_df: pd.DataFrame) -> None:
+        normalized = cell_line_df.rename(columns={"edited": "CELL_LINE_NAME"})
+        self.cl_dict_file = normalized
+        self.main_cl_list = [self._clean_text_value(value) for value in normalized["CELL_LINE_NAME"].tolist()]
+        self.cl_main_dict = {
+            self._clean_text_value(cell_line): self._clean_text_value(main_name)
+            for cell_line, main_name in zip(normalized["CELL_LINE_NAME"], normalized["main"])
+        }
+        self.cl_tissue_dict = {
+            self._clean_text_value(cell_line): self._clean_text_value(tissue)
+            for cell_line, tissue in zip(normalized["CELL_LINE_NAME"], normalized["TISSUE"])
+        }
+        self.cl_rrid_dict = {
+            self._clean_text_value(cell_line): self._clean_text_value(rrid)
+            for cell_line, rrid in zip(normalized["CELL_LINE_NAME"], normalized["RRID"])
+        }
+
+    def _build_omics_lookup(self, omics_df: pd.DataFrame) -> None:
+        self.omics_file = omics_df
+        omics_only_df = omics_df.set_index("CELL_LINE_NAME")
+        self.omics_feature_count = int(omics_only_df.shape[1])
+        self.omics_lookup = {
+            cell_line: row.to_numpy(dtype=np.float32)
+            for cell_line, row in omics_only_df.iterrows()
+        }
+
+    def _valid_compounds(self, smiles_list: list[Any]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+        valid_compounds: list[dict[str, Any]] = []
+        invalid_smiles: list[dict[str, Any]] = []
+        for smiles in smiles_list:
+            if not isinstance(smiles, str) or not smiles.strip():
+                invalid_smiles.append({"smiles": smiles, "error": "Invalid or empty SMILES string"})
+                continue
+            ecfp4_bits = self.smiles_to_ecfp4(smiles)
+            if ecfp4_bits is None:
+                invalid_smiles.append({"smiles": smiles, "error": "Could not parse SMILES"})
+                continue
+            valid_compounds.append({"smiles": smiles, "ecfp4": ecfp4_bits})
+        return valid_compounds, invalid_smiles
+
+    def _assemble_feature_rows(self, valid_compounds: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        feature_rows: list[dict[str, Any]] = []
+        for compound in valid_compounds:
+            for cell_line in self.main_cl_list:
+                omics_features = self.omics_lookup.get(cell_line)
+                if omics_features is None:
+                    continue
+                feature_rows.append(
+                    {
+                        "smiles": compound["smiles"],
+                        "cell_line": cell_line,
+                        "features": list(omics_features) + compound["ecfp4"],
+                    }
+                )
+        return feature_rows
+
     def load_model_and_data(self) -> bool:
         try:
             LOGGER.info("Loading prediction assets from %s", self.asset_dir)
@@ -103,21 +170,10 @@ class PIC50Predictor:
                 self.is_loaded = False
                 return False
 
-            self.omics_file = pd.read_csv(assets["omics_file"], delimiter="\t")
-            self.cl_dict_file = pd.read_csv(assets["cell_line_file"], delimiter="\t")
+            omics_df, cell_line_df = self._load_tabular_assets(assets)
             self.loaded_model = joblib.load(assets["model_file"])
-
-            self.cl_dict_file = self.cl_dict_file.rename(columns={"edited": "CELL_LINE_NAME"})
-            self.main_cl_list = self.cl_dict_file["CELL_LINE_NAME"].tolist()
-            self.cl_main_dict = dict(zip(self.cl_dict_file["CELL_LINE_NAME"], self.cl_dict_file["main"]))
-            self.cl_tissue_dict = dict(zip(self.cl_dict_file["CELL_LINE_NAME"], self.cl_dict_file["TISSUE"]))
-            self.cl_rrid_dict = dict(zip(self.cl_dict_file["CELL_LINE_NAME"], self.cl_dict_file["RRID"]))
-            omics_only_df = self.omics_file.set_index("CELL_LINE_NAME")
-            self.omics_feature_count = int(omics_only_df.shape[1])
-            self.omics_lookup = {
-                cell_line: row.to_numpy(dtype=np.float32)
-                for cell_line, row in omics_only_df.iterrows()
-            }
+            self._build_cell_line_metadata(cell_line_df)
+            self._build_omics_lookup(omics_df)
 
             self.is_loaded = True
             self.load_error = None
@@ -161,31 +217,11 @@ class PIC50Predictor:
                 "load_error": self.load_error,
             }
 
-        valid_compounds: list[dict[str, Any]] = []
-        invalid_smiles: list[dict[str, Any]] = []
-        for smiles in smiles_list:
-            if not isinstance(smiles, str) or not smiles.strip():
-                invalid_smiles.append({"smiles": smiles, "error": "Invalid or empty SMILES string"})
-                continue
-            ecfp4_bits = self.smiles_to_ecfp4(smiles)
-            if ecfp4_bits is None:
-                invalid_smiles.append({"smiles": smiles, "error": "Could not parse SMILES"})
-                continue
-            valid_compounds.append({"smiles": smiles, "ecfp4": ecfp4_bits})
-
+        valid_compounds, invalid_smiles = self._valid_compounds(smiles_list)
         if not valid_compounds:
             return self._format_invalid_result(smiles_list, invalid_smiles)
 
-        all_data: list[dict[str, Any]] = []
-        for compound in valid_compounds:
-            for cell_line in self.main_cl_list:
-                omics_features = self.omics_lookup.get(cell_line)
-                if omics_features is None:
-                    continue
-                combined_features = list(omics_features) + compound["ecfp4"]
-                all_data.append(
-                    {"smiles": compound["smiles"], "cell_line": cell_line, "features": combined_features}
-                )
+        all_data = self._assemble_feature_rows(valid_compounds)
 
         feature_matrix = np.array([row["features"] for row in all_data], dtype=np.float32)
         predictions = self.loaded_model.predict(feature_matrix) if len(all_data) else []
@@ -232,9 +268,19 @@ class PIC50Predictor:
                 "omics_features": self.omics_feature_count,
                 "ecfp4_features": 1024,
                 "total_features": int(self.omics_feature_count + 1024),
-                "available_tissues": len(set(self.cl_tissue_dict.values())),
+                "available_tissues": len({value for value in self.cl_tissue_dict.values() if value}),
                 "model_version": self.asset_config.model_filename,
                 "feature_schema_version": "omics_3747_plus_ecfp4_1024_v1",
+            },
+            "fingerprint_info": {
+                "type": "ECFP4",
+                "radius": 2,
+                "bits": 1024,
+                "library": "RDKit",
+            },
+            "performance_limits": {
+                "max_smiles_per_request": os.environ.get("MAX_SMILES_PER_REQUEST", "10"),
+                "prediction_time": "Varies by number of SMILES and hardware; use small batches for public requests.",
             },
             "asset_status": self.asset_status(),
             "dependency_status": self.dependency_status(),

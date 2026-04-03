@@ -16,10 +16,12 @@ This documentation set turns the project into a maintainable scientific software
 
 ## Current State
 
-The current repository contains documentation, archived manuscript materials, and a maintained baseline for the legacy prediction service under `services/prediction-api/`.
+The current repository contains documentation, archived manuscript materials, benchmark evidence, and a maintained baseline for the legacy prediction service under `services/prediction-api/`.
 
 The web application source code still needs to be imported into the designated component directories.
 
-The verified legacy Hugging Face prediction service is now represented in `services/prediction-api/legacy_verified/` as the preserved baseline for future refactoring.
+The verified legacy Hugging Face prediction service is preserved in `services/prediction-api/legacy_verified/`, while the current maintained service and Hugging Face sync templates live in `services/prediction-api/`.
 
 The canonical current-repo benchmark output target is `models/evaluation/legacy_pic50_baseline/`.
+
+The public Hugging Face deployment has been reviewed and aligned with the maintained Flask/Docker baseline; see `docs/research/supplementary/huggingface-space-parity.md`.

@@ -1,0 +1,31 @@
+FROM python:3.9-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY app.py .
+COPY predictor.py .
+RUN mkdir -p /app/assets
+COPY GDSC_extracted_988_cell_lines_L1000_common_genes_3747_feature_vector_v1_selected_common_3_platform_v2.txt /app/assets/
+COPY GDSC_988_cell_line_name_main_fix_RRID_v1.txt /app/assets/
+COPY GDSC_CCLE_cross_domain_mode_7_v4.joblib /app/assets/
+
+EXPOSE 5000
+
+ENV PYTHONUNBUFFERED=1
+ENV PORT=5000
+ENV HOST=0.0.0.0
+ENV MAX_SMILES_PER_REQUEST=10
+
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:5000/api/health || exit 1
+
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--timeout", "300", "app:app"]

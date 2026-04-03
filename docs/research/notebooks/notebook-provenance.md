@@ -4,6 +4,8 @@
 
 This page identifies the decisive notebooks in the legacy codebase and summarizes what each one contributes to the implemented PharmacoProfiler system.
 
+For manuscript-facing preprocessing claims mapped to specific notebooks, see `notebook-methods-evidence-matrix.md`.
+
 ## Core modeling notebooks
 
 ### `GDSC_trained_model_predictions_for_all_platforms_v1.ipynb`
@@ -39,6 +41,10 @@ This page identifies the decisive notebooks in the legacy codebase and summarize
   - `GDSC1_cell_line_file_v1.ipynb`
   - `GDSC2_cell_line_file_v1.ipynb`
 - role: source-specific response extraction, cell line tables, and compound handling
+- preprocessing evidence:
+  - drug metadata header cleanup
+  - dataset-specific filtering for GDSC1 and GDSC2
+  - duplicate compound collapse and SMILES-linked response exports
 
 ### CCLE
 - examples:
@@ -46,6 +52,10 @@ This page identifies the decisive notebooks in the legacy codebase and summarize
   - `CCLE_GNF_drug_response_dataset_v1.ipynb`
   - `CCLE_NP24_drug_response_dataset_v1.ipynb`
 - role: response extraction and harmonization for the CCLE evaluation domain
+- preprocessing evidence:
+  - NP24 and GNF response reshaping
+  - IC50-to-pIC50 conversion
+  - canonical long-format response exports
 
 ### FIMM
 - examples:
@@ -53,12 +63,20 @@ This page identifies the decisive notebooks in the legacy codebase and summarize
   - `FIMM_cell_line_file_v1.ipynb`
   - `FIMM_compound_file_v1.ipynb`
 - role: smaller external pharmacogenomic dataset integration
+- preprocessing evidence:
+  - manual cell-line alias correction
+  - IC50 recovery from dose-response fitting
+  - pIC50 conversion and canonical output formatting
 
 ### NCI-60
 - examples:
   - `NCI-60_compound_file_v1.ipynb`
   - additional CellMiner/NCI-60 notebooks and tables in `Cellminer/` and `NCI-60/`
 - role: alternative assay-source integration and compound mapping support
+- preprocessing evidence:
+  - pGI50 endpoint retention
+  - quality-control subset wording in notebook comments
+  - wide-to-long reshaping using colon-delimited headers
 
 ### PRISM, CTRP, NCATS
 - examples:
@@ -66,6 +84,9 @@ This page identifies the decisive notebooks in the legacy codebase and summarize
   - `CTRP_drug_response_dataset_v1.ipynb`
   - `NCATS_drug_response_v1.ipynb`
 - role: evidence that the broader PharmacoProfiler scope extended beyond the three-platform prediction service to a larger harmonized knowledge base
+- preprocessing evidence:
+  - NCATS wide-to-long reshaping and tissue mapping
+  - CellMiner-linked harmonization context for CTRP and GDSC-derived tables
 
 ## Supporting chemical and annotation notebooks
 
@@ -81,6 +102,9 @@ This page identifies the decisive notebooks in the legacy codebase and summarize
   - `Fingerprint_production_for_compound_v1.ipynb`
   - `Fingerprint_production_for_approved_compounds_v1.ipynb`
 - role: Morgan fingerprint generation supporting the prediction pipeline
+- preprocessing evidence:
+  - RDKit Morgan/ECFP4 fingerprints with radius 2 and 1024 bits
+  - bit-string exports for downstream prediction use
 
 ### Class and visualization notebooks
 - examples:

@@ -13,6 +13,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: test -d services/prediction-api || exit 0
-      - run: test -f services/prediction-api/requirements.txt && pip install -r services/prediction-api/requirements.txt || true
-      - run: test -f services/prediction-api/smoke_test.py && python services/prediction-api/smoke_test.py || true
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r services/prediction-api/requirements.txt
+      - run: python -m unittest tests.api.test_prediction_api_contract tests.unit.test_benchmark_common tests.unit.test_prediction_predictor
+      - run: python services/prediction-api/smoke_test.py

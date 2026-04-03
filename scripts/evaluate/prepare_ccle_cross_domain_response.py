@@ -1,65 +1,63 @@
 from __future__ import annotations
 
+import argparse
 import json
 import os
 from pathlib import Path
-from typing import Any
 
 import pandas as pd
 
+try:
+    from ._common import (
+        DEFAULT_CONFIG_PATH,
+        REPO_ROOT,
+        fingerprint_map_from_gdsc,
+        load_json,
+        normalize_token,
+        resolve_benchmark_paths,
+    )
+except ImportError:
+    from _common import (
+        DEFAULT_CONFIG_PATH,
+        REPO_ROOT,
+        fingerprint_map_from_gdsc,
+        load_json,
+        normalize_token,
+        resolve_benchmark_paths,
+    )
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-CONFIG_PATH = REPO_ROOT / "configs" / "models" / "legacy-pic50-benchmark-config.json"
 
-
-def load_json(path: Path) -> dict[str, Any]:
-    with path.open("r", encoding="utf-8") as handle:
-        return json.load(handle)
-
-
-def normalize_token(value: Any) -> str:
-    return "".join(character for character in str(value).lower() if character.isalnum())
-
-
-def ensure_output_dir(preferred_path: Path) -> Path:
-    override = os.environ.get("PHARMACOPROFILER_BENCHMARK_OUTPUT_DIR")
-    if override:
-        output_dir = Path(override).expanduser().resolve()
-        output_dir.mkdir(parents=True, exist_ok=True)
-        return output_dir
-
-    try:
-        preferred_path.mkdir(parents=True, exist_ok=True)
-        return preferred_path
-    except OSError:
-        fallback_dir = Path("/tmp/pharmacoprofiler_outputs/legacy_pic50_baseline").resolve()
-        fallback_dir.mkdir(parents=True, exist_ok=True)
-        return fallback_dir
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Reconstruct the CCLE cross-domain benchmark input.")
+    parser.add_argument(
+        "--config",
+        type=Path,
+        default=DEFAULT_CONFIG_PATH,
+        help="Benchmark config JSON describing legacy inputs and default output paths.",
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=None,
+        help="Optional output directory override.",
+    )
+    return parser.parse_args()
 
 
 def main() -> None:
-    config = load_json(CONFIG_PATH)
-    legacy_root = Path(config["legacy_root"]).resolve()
-    output_dir = ensure_output_dir((REPO_ROOT / config["output_dir"]).resolve())
+    args = parse_args()
+    config_path = args.config.resolve()
+    config = load_json(config_path)
+    output_override = str(args.output_dir.resolve()) if args.output_dir else os.environ.get(
+        "PHARMACOPROFILER_BENCHMARK_OUTPUT_DIR"
+    )
+    paths = resolve_benchmark_paths(config, output_dir_override=output_override)
 
-    gdsc_path = (legacy_root / config["gdsc_response_path"]).resolve()
-    ccle_vector_path = (legacy_root / config["ccle_vector_path"]).resolve()
-    raw_ccle_response_path = (legacy_root / config["raw_ccle_response_path"]).resolve()
+    gdsc_df = pd.read_csv(paths.gdsc_response_path, sep="\t")
+    ccle_vector_df = pd.read_csv(paths.ccle_vector_path, sep="\t", usecols=["CELL_LINE_NAME"])
+    ccle_raw_df = pd.read_csv(paths.raw_ccle_response_path, sep="\t")
 
-    gdsc_df = pd.read_csv(gdsc_path, sep="\t")
-    ccle_vector_df = pd.read_csv(ccle_vector_path, sep="\t", usecols=["CELL_LINE_NAME"])
-    ccle_raw_df = pd.read_csv(raw_ccle_response_path, sep="\t")
-
-    fingerprint_map: dict[str, str] = {}
-    for _, row in gdsc_df[["DRUG_NAME", "DRUG_NAME_edited", "FINGERPRINT"]].dropna().iterrows():
-        fingerprint = str(row["FINGERPRINT"])
-        if len(fingerprint) != 1024:
-            continue
-        for source_value in (row["DRUG_NAME"], row["DRUG_NAME_edited"]):
-            normalized = normalize_token(source_value)
-            if normalized and normalized not in fingerprint_map:
-                fingerprint_map[normalized] = fingerprint
-
+    fingerprint_map = fingerprint_map_from_gdsc(gdsc_df)
     reconstructed_df = ccle_raw_df.copy()
     reconstructed_df["CELL_LINE_NAME_edited"] = reconstructed_df["CELL_LINE_NAME_edited"].astype(str).str.lower()
     reconstructed_df["DRUG_NAME_edited"] = reconstructed_df["DRUG_NAME"].map(normalize_token)
@@ -84,14 +82,18 @@ def main() -> None:
         "mapped_drugs": sorted(reconstructed_df["DRUG_NAME_edited"].unique().tolist()),
     }
 
-    output_path = output_dir / "ccle_response_reconstructed.tsv"
-    summary_path = output_dir / "ccle_response_reconstruction_summary.json"
+    output_path = paths.output_dir / "ccle_response_reconstructed.tsv"
+    summary_path = paths.output_dir / "ccle_response_reconstruction_summary.json"
+    reconstruction_summary["source_mode"] = "reconstructed_from_raw"
+    reconstruction_summary["source_path"] = str(paths.raw_ccle_response_path)
 
     reconstructed_df.to_csv(output_path, sep="\t", index=False)
     summary_path.write_text(json.dumps(reconstruction_summary, indent=2), encoding="utf-8")
 
-    print(f"Preferred output dir: {(REPO_ROOT / config['output_dir']).resolve()}")
-    print(f"Actual output dir: {output_dir}")
+    print("summary:")
+    print(f"config_path: {config_path}")
+    print(f"preferred_output_dir: {(REPO_ROOT / config['output_dir']).resolve()}")
+    print(f"output_dir: {paths.output_dir}")
     print(f"Wrote reconstructed CCLE benchmark input to: {output_path}")
     print(f"Wrote reconstruction summary to: {summary_path}")
     print(json.dumps(reconstruction_summary, indent=2))

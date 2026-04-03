@@ -4,6 +4,7 @@ This file replaces the earlier generic draft sections with a code-grounded basel
 
 For the full implementation evidence, see:
 - [methods-verified-baseline.md](methods-verified-baseline.md)
+- [preprocessing-methods-from-notebooks.md](preprocessing-methods-from-notebooks.md)
 - [../legacy/implemented-scope-analysis.md](../legacy/implemented-scope-analysis.md)
 - [../legacy/modeling-inventory.md](../legacy/modeling-inventory.md)
 
@@ -52,6 +53,10 @@ The broader legacy workspace contains dataset-specific notebooks for GDSC, CCLE,
 
 At present, that harmonization layer is preserved as notebook provenance and supporting tables rather than a packaged pipeline.
 
+The current repository also includes a notebook-grounded preprocessing note that can be used to rewrite the dataset and harmonization methods sections without inventing unsupported steps:
+
+- [preprocessing-methods-from-notebooks.md](preprocessing-methods-from-notebooks.md)
+
 ## 4. Results Baseline
 
 ### 4.1 Verified Claims
@@ -61,15 +66,18 @@ The current repository supports these defensible claims:
 - The deployed service publicly serves per-cell-line predictions from SMILES input.
 - Prediction outputs are enriched with canonical cell line names, RRIDs, and tissue labels.
 - The current-repo packaged baseline run over the reconstructed CCLE evaluation set achieved Pearson `0.7556`, Spearman `0.6273`, MAE `0.6548`, RMSE `0.8361`, and R² `0.2633`.
+- Bootstrap `95%` confidence intervals for the current baseline are now available, including Pearson `0.7416-0.7685` and RMSE `0.8199-0.8524`.
+- The current subgroup outputs now use a canonical tissue-normalization layer for manuscript-facing reporting while preserving raw-label audit tables.
 
 ### 4.2 Claims that still require rerun evidence
 
 The following should not be presented as final benchmark results:
-- confidence intervals
 - baseline-model comparisons
 - leakage-safe benchmark claims across multiple split policies
 
 Use [../supplementary/benchmark-reproducibility-baseline.md](../supplementary/benchmark-reproducibility-baseline.md) as the current benchmark baseline and rerun checklist.
+Use [normalization-and-benchmark-evidence.md](normalization-and-benchmark-evidence.md) as the canonical manuscript note for normalized subgroup evidence, calibration caveats, and manuscript-safe wording.
+Use [preprocessing-methods-from-notebooks.md](preprocessing-methods-from-notebooks.md) for notebook-grounded dataset preprocessing and harmonization wording.
 
 When the current-repo benchmark is executed, quantitative results should be cited from:
 - `models/evaluation/legacy_pic50_baseline/benchmark_summary.json`
@@ -78,3 +86,5 @@ When the current-repo benchmark is executed, quantitative results should be cite
 The current benchmark should be described with two explicit caveats:
 - the CCLE evaluation input is reconstructed from preserved raw files
 - the deployed `v4` model artifact emits a scikit-learn version compatibility warning during load
+
+For publishable wording on strengths, weaknesses, and next-step analyses, see [normalization-and-benchmark-evidence.md](normalization-and-benchmark-evidence.md) and [../supplementary/publication-readiness-analysis.md](../supplementary/publication-readiness-analysis.md).

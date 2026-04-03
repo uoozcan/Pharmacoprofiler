@@ -4,6 +4,8 @@
 
 This is the corrected baseline text for the manuscript methods and initial model-results description. It is derived from verified code and deployed artifacts, not from generic narrative text.
 
+For notebook-grounded dataset preprocessing and harmonization language, see `preprocessing-methods-from-notebooks.md`.
+
 ## 3.2 Machine Learning Model for Drug Response Prediction
 
 The currently verified PharmacoProfiler prediction engine is a tabular regression model that predicts pIC50 values for compound-cell-line pairs. The model combines a precomputed cell line omics representation with an on-the-fly chemical fingerprint derived from the submitted compound structure.
@@ -25,6 +27,11 @@ At inference time, the model concatenates:
 - 1,024 ECFP4 bits
 
 This yields a 4,771-feature vector for each compound-cell-line pair.
+
+Notebook-derived preprocessing provenance for response preparation, Cellosaurus enrichment, and model-input assembly is summarized in:
+
+- `docs/research/manuscript/preprocessing-methods-from-notebooks.md`
+- `docs/research/notebooks/notebook-methods-evidence-matrix.md`
 
 ## 3.4 Cell Line Mapping and Metadata
 
@@ -59,13 +66,20 @@ The current packaged baseline run produced:
 - RMSE: `0.8361`
 - R²: `0.2633`
 
+Bootstrap confidence intervals, calibration findings, and normalized subgroup evidence are now recorded in:
+
+- `models/evaluation/legacy_pic50_baseline/subgroup_analysis_summary.json`
+- `models/evaluation/legacy_pic50_baseline/tissue_metrics.tsv`
+- `models/evaluation/legacy_pic50_baseline/potency_bin_metrics.tsv`
+- `docs/research/manuscript/normalization-and-benchmark-evidence.md`
+
 These values should be cited as the current repository baseline only together with the explicit caveat that the benchmark uses a reconstructed CCLE evaluation input and a deployed `v4` model artifact that emits a scikit-learn version compatibility warning at load time.
 
 At this stage, the correct manuscript framing is:
 - the predictor architecture and feature schema are verified
 - the cross-domain training/evaluation design is verified
 - the public serving layer is verified
-- a reproducible current-repo benchmark baseline is available for inclusion in figures or claims, but confidence intervals and comparison baselines remain pending
+- a reproducible current-repo benchmark baseline is available for inclusion in figures or claims, with normalized tissue reporting now defined for manuscript tables and figures
 
 ## What should not be claimed from current evidence
 

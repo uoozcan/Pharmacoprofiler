@@ -31,3 +31,17 @@ Maintain reproducible audit tables for:
 - ambiguous mappings
 - dropped rows and reasons
 - per-source coverage statistics
+
+## Tissue Reporting Normalization
+
+Use a separate reporting-layer normalization for benchmark summaries and manuscript artifacts:
+
+- versioned source of truth: `configs/datasets/tissue_vocabulary.tsv`
+- documentation: `docs/datasets/tissue-normalization.md`
+- current explicit alias merges:
+  - `Soft Tissue` -> `soft_tissue`
+  - `Colon` -> `large_intestine`
+- labels intentionally kept distinct pending source review:
+  - `pleura`
+  - `pleural_effusion`
+  - `pericardial_effusion`

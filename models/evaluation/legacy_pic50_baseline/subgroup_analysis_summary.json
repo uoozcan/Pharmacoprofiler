@@ -1,0 +1,50 @@
+{
+  "source_files": {
+    "predictions": "/home/umut/projects/pharmacoprofiler/models/evaluation/legacy_pic50_baseline/ccle_predictions.tsv",
+    "reconstructed_ccle": "/home/umut/projects/pharmacoprofiler/models/evaluation/legacy_pic50_baseline/ccle_response_reconstructed.tsv",
+    "tissue_vocabulary": "/home/umut/projects/pharmacoprofiler/configs/datasets/tissue_vocabulary.tsv"
+  },
+  "global_metrics": {
+    "rows": 6513,
+    "pearson_r": 0.7556227160048853,
+    "spearman_r": 0.6272654831115683,
+    "mae": 0.6548279653550018,
+    "mse": 0.6991376514941441,
+    "rmse": 0.8361445159146498,
+    "r_squared": 0.26325317904447165,
+    "mean_signed_error": -0.494256800640959,
+    "underpredict_share": 0.85014586212191,
+    "overpredict_share": 0.14985413787808996
+  },
+  "bootstrap_ci_95": {
+    "pearson_r": {
+      "mean": 0.7553483939725445,
+      "ci95_low": 0.7415987761445864,
+      "ci95_high": 0.7684933495681812
+    },
+    "spearman_r": {
+      "mean": 0.6270730567221094,
+      "ci95_low": 0.6094187860767335,
+      "ci95_high": 0.6444056809268901
+    },
+    "mae": {
+      "mean": 0.6551163866896526,
+      "ci95_low": 0.6417289503404916,
+      "ci95_high": 0.6673656584386366
+    },
+    "rmse": {
+      "mean": 0.8365675035024713,
+      "ci95_low": 0.8198960496763064,
+      "ci95_high": 0.8523559542235661
+    },
+    "r_squared": {
+      "mean": 0.26254362287139593,
+      "ci95_low": 0.23092693881082899,
+      "ci95_high": 0.2928059594345518
+    }
+  },
+  "calibration": {
+    "global_slope": 0.7404030002808389,
+    "global_intercept": 1.0074689797143799
+  }
+}

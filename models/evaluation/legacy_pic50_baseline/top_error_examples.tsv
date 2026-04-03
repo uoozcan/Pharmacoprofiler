@@ -1,0 +1,21 @@
+CELL_LINE_NAME	DRUG_NAME	TISSUE_NAME	TISSUE_CODE	TISSUE_DISPLAY	pIC50_True	pIC50_Pred	signed_error	abs_error
+nco2	nilotinib	haematopoietic_and_lymphoid_tissue	haematopoietic_and_lymphoid_tissue	Haematopoietic and Lymphoid Tissue	8.119148	4.389397298274914	-3.7297507017250853	3.7297507017250853
+sigm5	plx4720	bone_marrow	bone_marrow	Bone Marrow	7.4740505	4.097671442048657	-3.3763790579513424	3.3763790579513424
+ku812	nilotinib	haematopoietic_and_lymphoid_tissue	haematopoietic_and_lymphoid_tissue	Haematopoietic and Lymphoid Tissue	7.7741165	4.431360251188698	-3.342756248811302	3.342756248811302
+sigm5	selumetinib	bone_marrow	bone_marrow	Bone Marrow	8.190821	4.883501462855868	-3.3073195371441315	3.3073195371441315
+allsil	nilotinib	haematopoietic_and_lymphoid_tissue	haematopoietic_and_lymphoid_tissue	Haematopoietic and Lymphoid Tissue	8.529869	5.239745503795231	-3.2901234962047683	3.2901234962047683
+hut78	crizotinib	haematopoietic_and_lymphoid_tissue	haematopoietic_and_lymphoid_tissue	Haematopoietic and Lymphoid Tissue	7.6408796	4.520701353729856	-3.120178246270144	3.120178246270144
+mcf7	crizotinib	pleural_effusion	pleural_effusion	Pleural Effusion	6.911539	3.939173423353081	-2.9723655766469195	2.9723655766469195
+kms34	irinotecan	pleural_effusion	pleural_effusion	Pleural Effusion	7.3937654	4.472449744044169	-2.9213156559558318	2.9213156559558318
+meg01	nilotinib	bone_marrow	bone_marrow	Bone Marrow	7.1594605	4.24748697761654	-2.9119735223834597	2.9119735223834597
+p12ichikawa	irinotecan	haematopoietic_and_lymphoid_tissue	haematopoietic_and_lymphoid_tissue	Haematopoietic and Lymphoid Tissue	7.676552	4.802435257661519	-2.8741167423384812	2.8741167423384812
+wm88	plx4720	skin	skin	Skin	6.6901913	3.8666090000064064	-2.823582299993594	2.823582299993594
+em2	nilotinib	bone_marrow	bone_marrow	Bone Marrow	8.122738	5.302733001849285	-2.820004998150715	2.820004998150715
+mino	crizotinib	haematopoietic_and_lymphoid_tissue	haematopoietic_and_lymphoid_tissue	Haematopoietic and Lymphoid Tissue	7.3868103	4.60484501438238	-2.78196528561762	2.78196528561762
+del	irinotecan	pleural_effusion	pleural_effusion	Pleural Effusion	7.9425397	5.177051919289097	-2.7654877807109033	2.7654877807109033
+capan2	nilotinib	pancreas	pancreas	Pancreas	7.2010403	4.441536095630893	-2.759504204369107	2.759504204369107
+lu99	irinotecan	pleura	pleura	Pleura	7.4528284	4.721326159167003	-2.731502240832997	2.731502240832997
+monomac1	sorafenib	haematopoietic_and_lymphoid_tissue	haematopoietic_and_lymphoid_tissue	Haematopoietic and Lymphoid Tissue	8.134486	5.426613257326277	-2.7078727426737235	2.7078727426737235
+ko52	selumetinib	bone_marrow	bone_marrow	Bone Marrow	7.5811157	4.876190246884536	-2.7049254531154636	2.7049254531154636
+kasumi2	irinotecan	bone_marrow	bone_marrow	Bone Marrow	7.3748913	4.700443954467773	-2.6744473455322266	2.6744473455322266
+l363	irinotecan	haematopoietic_and_lymphoid_tissue	haematopoietic_and_lymphoid_tissue	Haematopoietic and Lymphoid Tissue	7.2980084	4.634879060292912	-2.663129339707088	2.663129339707088

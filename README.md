@@ -15,7 +15,11 @@ This repository was restructured from a manuscript-first workspace into a monore
 - manuscript and reviewer materials
 - archived legacy drafts
 
-The web application source code is not yet imported into this repository. The prediction service baseline is now represented directly under `services/prediction-api/`, while the original Hugging Face-aligned service files remain preserved under `services/prediction-api/legacy_verified/`.
+The web application source code is not yet imported into this repository. The maintained prediction service baseline is represented directly under `services/prediction-api/`, while the original Hugging Face-aligned service files remain preserved under `services/prediction-api/legacy_verified/`.
+
+The public Hugging Face Space has now been aligned with the maintained Flask/Docker service contract and repo-side sync templates are tracked in:
+- `services/prediction-api/HF_SPACE_README.md`
+- `services/prediction-api/HF_SPACE_Dockerfile`
 
 ## Repository Layout
 
@@ -40,10 +44,11 @@ The web application source code is not yet imported into this repository. The pr
 1. Read the project overview in [docs/index.md](docs/index.md).
 2. Review the architecture in [docs/architecture/overview.md](docs/architecture/overview.md).
 3. Review manuscript and reviewer materials in [docs/research/README.md](docs/research/README.md).
-4. Import the web frontend and backend source trees into:
-   - `app/frontend/`
-   - `app/backend/`
-5. Run the benchmark foundation steps:
+4. Review the prediction API contract in [docs/api/prediction-api.md](docs/api/prediction-api.md).
+5. Run the maintained service checks:
+   - `python3 -m unittest tests.api.test_prediction_api_contract tests.unit.test_benchmark_common tests.unit.test_prediction_predictor`
+   - `python3 services/prediction-api/smoke_test.py`
+6. Run the benchmark foundation steps:
    - `python3 scripts/evaluate/benchmark_reproducibility_check.py`
    - `python3 scripts/evaluate/run_legacy_benchmark_baseline.py`
 
@@ -53,6 +58,7 @@ The web application source code is not yet imported into this repository. The pr
 - Developer documentation: [docs/developer-guide/local-setup.md](docs/developer-guide/local-setup.md)
 - API documentation: [docs/api/prediction-api.md](docs/api/prediction-api.md)
 - Verified legacy API baseline: [docs/api/legacy-pic50-service.md](docs/api/legacy-pic50-service.md)
+- Hugging Face parity note: [docs/research/supplementary/huggingface-space-parity.md](docs/research/supplementary/huggingface-space-parity.md)
 - Benchmark reproducibility baseline: [docs/research/supplementary/benchmark-reproducibility-baseline.md](docs/research/supplementary/benchmark-reproducibility-baseline.md)
 - Dataset documentation: [docs/datasets/data-sources.md](docs/datasets/data-sources.md)
 - Operations and release process: [docs/operations/release-and-sustainability.md](docs/operations/release-and-sustainability.md)
@@ -76,13 +82,12 @@ Large raw datasets, private exports, and trained model binaries should not be co
 
 ## Testing
 
-The repository includes CI placeholders for:
+The repository includes CI coverage for:
 - documentation build validation
-- backend tests
-- frontend tests
+- backend/frontend placeholders while app code is still absent
 - prediction service smoke tests
 
-The benchmark package currently requires a Python environment with `joblib` and `scikit-learn`. The default shell in this workspace does not provide those packages.
+The prediction service contract tests and helper-unit tests can be run with Python and the maintained test files under `tests/`. Benchmark execution additionally requires runtime dependencies such as `joblib`, `scikit-learn`, and `rdkit`.
 
 ## Legacy Predictor Import
 

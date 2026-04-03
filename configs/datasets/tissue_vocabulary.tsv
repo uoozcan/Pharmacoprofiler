@@ -1,0 +1,34 @@
+raw_label	normalized_code	display_label	merge_into_code	note
+Colon	large_intestine	Large Intestine / Colon	large_intestine	Legacy label variant merged into the large intestine reporting bucket.
+Soft Tissue	soft_tissue	Soft Tissue	soft_tissue	Case and spacing variant merged into the soft tissue reporting bucket.
+abdomen	abdomen	Abdomen		Canonical raw label retained.
+ascites	ascites	Ascites		Canonical raw label retained.
+autonomic_ganglia	autonomic_ganglia	Autonomic Ganglia		Canonical raw label retained.
+blood	blood	Blood		Canonical raw label retained.
+bone	bone	Bone		Canonical raw label retained.
+bone_marrow	bone_marrow	Bone Marrow		Canonical raw label retained.
+breast	breast	Breast		Canonical raw label retained.
+central_nervous_system	central_nervous_system	Central Nervous System		Canonical raw label retained.
+endometrium	endometrium	Endometrium		Canonical raw label retained.
+fibroblast	fibroblast	Fibroblast		Canonical raw label retained.
+haematopoietic_and_lymphoid_tissue	haematopoietic_and_lymphoid_tissue	Haematopoietic and Lymphoid Tissue		Canonical raw label retained.
+kidney	kidney	Kidney		Canonical raw label retained.
+large_intestine	large_intestine	Large Intestine / Colon		Canonical raw label retained.
+liver	liver	Liver		Canonical raw label retained.
+lung	lung	Lung		Canonical raw label retained.
+lymph_node	lymph_node	Lymph Node		Canonical raw label retained.
+oesophagus	oesophagus	Oesophagus		Canonical raw label retained.
+ovary	ovary	Ovary		Canonical raw label retained.
+pancreas	pancreas	Pancreas		Canonical raw label retained.
+pericardial_effusion	pericardial_effusion	Pericardial Effusion		Kept distinct from other anatomical-site labels.
+pleura	pleura	Pleura		Kept distinct from pleural effusion pending source-level curation.
+pleural_effusion	pleural_effusion	Pleural Effusion		Kept distinct from pleura pending source-level curation.
+prostate	prostate	Prostate		Canonical raw label retained.
+skin	skin	Skin		Canonical raw label retained.
+small_intestine	small_intestine	Small Intestine		Canonical raw label retained.
+soft_tissue	soft_tissue	Soft Tissue		Canonical raw label retained.
+spleen	spleen	Spleen		Canonical raw label retained.
+stomach	stomach	Stomach		Canonical raw label retained.
+thyroid	thyroid	Thyroid		Canonical raw label retained.
+upper_aerodigestive_tract	upper_aerodigestive_tract	Upper Aerodigestive Tract		Canonical raw label retained.
+urinary_tract	urinary_tract	Urinary Tract		Canonical raw label retained.

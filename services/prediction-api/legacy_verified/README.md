@@ -8,6 +8,8 @@ Verified sources:
 - local legacy workspace under `/home/umut/projects/pharmacoprofiler_legacy/CLRB_MODELLING/pharmacoprofiler_docker/pharmacoprofiler/huggingface_profile`
 - public Hugging Face Space `ozcanumut/pic50-prediction-server`
 
+This directory is a preserved legacy snapshot, not the current deployment source of truth. The maintained baseline now lives in `services/prediction-api/`, and the repo-side Hugging Face sync templates live alongside it.
+
 ## Included here
 
 - service entrypoint copied from the verified legacy Hugging Face profile

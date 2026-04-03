@@ -64,6 +64,12 @@ Run the packaged evaluation workflow:
 python3 scripts/evaluate/run_legacy_benchmark_baseline.py
 ```
 
+Then generate subgroup diagnostics from the same benchmark outputs:
+
+```bash
+python3 scripts/evaluate/analyze_legacy_benchmark_subgroups.py
+```
+
 This command writes canonical outputs to `models/evaluation/legacy_pic50_baseline/`. In restricted environments where that path is not writable, the scripts fall back to `/tmp/pharmacoprofiler_outputs/legacy_pic50_baseline/`.
 
 The first packaged version preserves the current legacy baseline while adding:
@@ -84,6 +90,13 @@ The current repository now has generated baseline benchmark outputs in:
 - `models/evaluation/legacy_pic50_baseline/metrics.tsv`
 - `models/evaluation/legacy_pic50_baseline/ccle_predictions.tsv`
 - `models/evaluation/legacy_pic50_baseline/ccle_response_reconstruction_summary.json`
+- `models/evaluation/legacy_pic50_baseline/subgroup_analysis_summary.json`
+- `models/evaluation/legacy_pic50_baseline/drug_metrics.tsv`
+- `models/evaluation/legacy_pic50_baseline/tissue_metrics.tsv`
+- `models/evaluation/legacy_pic50_baseline/tissue_metrics_raw.tsv`
+- `models/evaluation/legacy_pic50_baseline/tissue_metrics_normalized.tsv`
+- `models/evaluation/legacy_pic50_baseline/potency_bin_metrics.tsv`
+- `models/evaluation/legacy_pic50_baseline/top_error_examples.tsv`
 
 The current packaged run produced:
 
@@ -94,3 +107,5 @@ The current packaged run produced:
 - R² `0.2633`
 
 See [benchmark-baseline-interpretation.md](benchmark-baseline-interpretation.md) for the narrative interpretation and compatibility caveats.
+See [benchmark-subgroup-analysis.md](benchmark-subgroup-analysis.md) for subgroup-level error and calibration diagnostics.
+See [benchmark-reporting-standard.md](benchmark-reporting-standard.md) for the required reporting bundle and stage definitions.
