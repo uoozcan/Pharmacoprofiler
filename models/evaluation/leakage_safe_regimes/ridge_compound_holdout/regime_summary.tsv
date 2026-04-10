@@ -1,0 +1,2 @@
+regime_name	model_name	folds	mean_mae	mean_rmse	mean_pearson_r	mean_spearman_r	mean_r_squared	total_test_rows
+compound_holdout	ridge	5	0.9036892843566582	1.152329950349014	0.4115196900590775	0.37778819116041323	-0.03532343237942883	337761

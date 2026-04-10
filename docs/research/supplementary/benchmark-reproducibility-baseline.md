@@ -50,15 +50,15 @@ This verifies that the expected legacy runtime artifacts still match the documen
 
 ## Known benchmark limitations
 
-- the current benchmark script is dataset-transfer based, not a modern leakage-safe benchmark suite
-- no confidence intervals are generated in the current legacy code
-- no baseline-model comparison is currently packaged in the repo
-- metric output files referenced in the training script are not yet promoted into canonical current-repo reports
+- the current legacy Random Forest baseline remains a dataset-transfer benchmark on a reconstructed CCLE overlap set
+- bootstrap confidence intervals, calibration diagnostics, subgroup summaries, and figure assets are now generated in the current repository
+- leakage-safe split regimes are now defined and a staged ridge comparator sweep has completed across the saved regimes
+- a full multi-model leakage-safe benchmark is still pending; the legacy RF comparator attempt did not produce result files and is not part of the current evidence package
 - the original prepared CCLE cross-domain response file is absent from the preserved legacy workspace and must currently be reconstructed from raw CCLE response records plus GDSC fingerprint mappings
 
-## Next required benchmark step
+## Current packaged benchmark workflow
 
-Run the packaged evaluation workflow:
+Run the packaged dataset-transfer evaluation workflow:
 
 ```bash
 python3 scripts/evaluate/run_legacy_benchmark_baseline.py
@@ -78,9 +78,26 @@ The first packaged version preserves the current legacy baseline while adding:
 - a machine-readable benchmark summary
 - reconstructed CCLE benchmark input provenance when the original prepared file is absent
 
-Confidence intervals and baseline comparisons remain phase-two benchmark tasks after the baseline rerun is stabilized.
+Confidence intervals and subgroup diagnostics are now part of the current benchmark package. Multi-model leakage-safe comparison remains a future benchmark task after the completed staged ridge sweep.
 
 See [benchmark-input-reconstruction.md](benchmark-input-reconstruction.md) for the current overlap counts and reconstructed input summary.
+
+The repository now also contains a deterministic Stage 3 split-design and staged ridge execution package for stronger benchmarking:
+
+- `models/evaluation/benchmark_design/gdsc_split_registry.tsv`
+- `models/evaluation/benchmark_design/benchmark_split_design_summary.json`
+- `models/evaluation/benchmark_design/benchmark_split_regime_counts.tsv`
+- `models/evaluation/leakage_safe_regimes/ridge_regime_comparison.tsv`
+- `docs/research/supplementary/leakage-safe-benchmark-design.md`
+- `docs/research/supplementary/leakage-safe-benchmark-results.md`
+
+These artifacts define saved split regimes for:
+- pair-random comparison
+- compound holdout
+- cell-line holdout
+- double-cold-start evaluation
+
+They should be reused in future benchmark runs rather than regenerated ad hoc.
 
 ## Current generated baseline outputs
 

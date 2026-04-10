@@ -1,0 +1,43 @@
+{
+  "analysis_name": "legacy_pic50_mechanism_annotations",
+  "run_timestamp_utc": "2026-04-03T12:29:00.159489+00:00",
+  "compound_table_path": "/home/umut/projects/pharmacoprofiler_legacy/Merged_all_platforms_compound_file_drug_target_update_v8.csv",
+  "mapped_benchmark_drugs": 16,
+  "total_benchmark_drugs": 16,
+  "unmatched_benchmark_drugs": [],
+  "class_counts": [
+    {
+      "compound_class": "Transporter inhibitors",
+      "n_drugs": 3
+    },
+    {
+      "compound_class": "Ion channel inhibitors",
+      "n_drugs": 1
+    },
+    {
+      "compound_class": "Cytosolic inhibitors",
+      "n_drugs": 1
+    },
+    {
+      "compound_class": "Kinase inhibitors",
+      "n_drugs": 10
+    },
+    {
+      "compound_class": "Epigenetic regulator inhibitors",
+      "n_drugs": 1
+    }
+  ],
+  "worst_mae_drug": {
+    "drug_name": "irinotecan",
+    "mae": 1.663103534396711,
+    "compound_class": "Transporter inhibitors",
+    "target_count": 17,
+    "target_preview": "Muscarinic acetylcholine receptor M4 | Acetylcholinesterase | Multidrug and toxin extrusion protein 1"
+  },
+  "broadest_target_drug": {
+    "drug_name": "sorafenib",
+    "target_count": 535,
+    "compound_class": "Kinase inhibitors",
+    "mae": 0.3829820198153145
+  }
+}

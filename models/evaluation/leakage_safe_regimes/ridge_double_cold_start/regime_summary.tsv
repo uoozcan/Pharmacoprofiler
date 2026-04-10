@@ -1,0 +1,2 @@
+regime_name	model_name	folds	mean_mae	mean_rmse	mean_pearson_r	mean_spearman_r	mean_r_squared	total_test_rows
+double_cold_start	ridge	5	0.9362783503666812	1.192348829902432	0.3682133169760528	0.3319323201580236	-0.10930963328678615	67675

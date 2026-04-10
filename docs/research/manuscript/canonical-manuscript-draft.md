@@ -1,90 +1,110 @@
-# PharmacoProfiler: Verified Methods and Results Baseline
+# PharmacoProfiler: A Harmonization-Centered Platform for Pharmacogenomic Response Prediction and Benchmark Transparency
 
-This file replaces the earlier generic draft sections with a code-grounded baseline. It is intentionally limited to what is currently verified from the legacy codebase and the deployed Hugging Face service.
+This draft is intentionally constrained to code-grounded and artifact-grounded claims from the preserved legacy workspace, the maintained repository, and the deployed Hugging Face service.
 
 For the full implementation evidence, see:
 - [methods-verified-baseline.md](methods-verified-baseline.md)
 - [preprocessing-methods-from-notebooks.md](preprocessing-methods-from-notebooks.md)
 - [../legacy/implemented-scope-analysis.md](../legacy/implemented-scope-analysis.md)
 - [../legacy/modeling-inventory.md](../legacy/modeling-inventory.md)
+- [../figures/figure_legends_and_mapping.md](../figures/figure_legends_and_mapping.md)
+
+## Abstract
+
+PharmacoProfiler is a pharmacogenomics platform developed to connect cross-resource data harmonization with deployable drug-response prediction. The current verified project scope combines notebook-grounded curation across major public pharmacogenomic resources, a preserved GDSC-to-CCLE pIC50 modeling lineage, and a public SMILES-to-cell-line inference service that returns pIC50 predictions together with canonical cell-line names, RRIDs, and tissue metadata. In the current repository, the deployed predictor is a Random Forest regressor operating on concatenated 3,747-feature cell-line omics vectors and 1,024-bit ECFP4 compound fingerprints. A reproducible cross-domain benchmark on a reconstructed CCLE overlap set (`6513` rows, `16` drugs, `434` cell lines) achieved Pearson `0.7556`, Spearman `0.6273`, MAE `0.6548`, RMSE `0.8361`, and `R² = 0.2633`, supporting a measurable but non-uniform predictive signal.
+
+Additional analyses showed that this baseline is limited by calibration compression, systematic underprediction of stronger responses, and subgroup-dependent error structure. A completed leakage-safe staged ridge benchmark further demonstrated that performance remains materially stronger under unseen-cell-line splits than under unseen-compound or double-cold-start regimes, indicating that drug novelty is the more difficult generalization axis in the current feature space. Taken together, these results support PharmacoProfiler as a reproducible platform baseline that combines harmonized pharmacogenomic context, public predictive serving, and benchmark transparency, while also making clear that stronger uncertainty quantification, multi-model leakage-safe comparison, and deeper biological validation are still needed for a higher-rigor predictive methods paper.
+
+## 1. Introduction and Positioning
+
+Public pharmacogenomic resources have made it substantially easier to explore drug sensitivity patterns across large cancer cell-line collections, but they leave a practical gap between curated multi-dataset context and deployable predictive workflows. Resources such as PharmacoDB, CellMinerCDB, DrugComb, and PharmacoGx are strong in data integration, query interfaces, and analytical reproducibility, yet they are less focused on exposing a lightweight public prediction service that accepts user-provided chemical structure input and returns metadata-rich response estimates across a curated panel of cell lines. PharmacoProfiler was developed in this gap as a project combining cross-resource pharmacogenomic curation, cell-line and compound harmonization, and a public pIC50 prediction workflow.
+
+The current verified scope of PharmacoProfiler is best understood as a harmonization-plus-serving platform rather than a model-architecture study. The repository and preserved legacy workspace support three linked contributions. First, the broader project assembled notebook-driven harmonization workflows spanning major public pharmacogenomic resources, including GDSC, CCLE, NCI-60, FIMM, PRISM, CTRP, NCATS, and CellMiner-linked materials. Second, the preserved predictor lineage implements a cross-domain GDSC-to-CCLE pIC50 modeling workflow using tabular omics and chemical fingerprint features. Third, the current public Hugging Face deployment exposes that predictor through a SMILES-to-cell-line inference service that returns not only predicted pIC50 values but also curated cell-line names, RRIDs, and tissue annotations.
+
+This framing is important for scientific positioning. The predictor core itself is methodologically conventional, consisting of a Random Forest regressor operating on concatenated omics and ECFP4 features, and it should not be overpresented as a state-of-the-art machine-learning innovation. The stronger present contribution lies in the way predictive inference is coupled to curated pharmacogenomic context, preserved preprocessing provenance, and a benchmark package that now makes the model's strengths and weaknesses explicit. In practical terms, PharmacoProfiler is currently differentiated less by architectural novelty than by the integration of harmonized legacy resources, a deployable public inference surface, and a transparent evaluation layer that can support more rigorous future extensions.
+
+Accordingly, this manuscript should position PharmacoProfiler as a reproducible platform baseline with predictive capability, not as a completed high-rigor methods benchmark across multiple advanced model families. Figure 7 is therefore most useful as a positioning figure: it supports the claim that PharmacoProfiler's near-term edge is the combination of cross-resource pharmacogenomic curation, metadata-rich public serving, and benchmark transparency, while its main current gaps relative to more model-driven studies remain uncertainty quantification, leakage-safe evaluation depth, and biologically grounded interpretability.
+
+The remainder of the manuscript is therefore organized around that narrower but stronger claim. The Methods section defines only the verified predictor, feature, metadata, service, and harmonization components that are currently recoverable from code and artifacts, and the Results and Discussion interpret those components through a benchmark package that explicitly reports both performance and failure structure.
 
 ## 3. Methods
 
+The current Methods section is written to preserve a strict boundary between verified implementation and broader historical project intent. Where the repository provides direct script, artifact, or service evidence, the text states those details directly. Where the larger legacy workspace supports broader preprocessing or harmonization claims only through notebooks, the text presents that scope conservatively and avoids reconstructing missing steps as established fact.
+
 ### 3.2 Machine Learning Model for Drug Response Prediction
 
-The currently verified PharmacoProfiler predictor is a supervised tabular regression model for pIC50 prediction. The core training script is `GDSC_CCLE_cross_domain_mode_7.py` from the legacy modeling workspace. That script trains a `RandomForestRegressor` on GDSC drug-response examples and evaluates transfer performance on CCLE.
+The currently verified PharmacoProfiler predictor is a supervised tabular regression model for pIC50 prediction. The preserved training lineage is centered on the legacy script `GDSC_CCLE_cross_domain_mode_7.py`, which trains a `RandomForestRegressor` using GDSC-derived response examples and evaluates transfer performance on CCLE. In the current repository, this script serves as the code-grounded reference for the model family, training direction, and cross-domain evaluation concept. The public inference service uses the deployed artifact `GDSC_CCLE_cross_domain_mode_7_v4.joblib`, which is treated here as the operational runtime model corresponding to that preserved training lineage.
 
-The deployed model artifact used by the public Hugging Face service is `GDSC_CCLE_cross_domain_mode_7_v4.joblib`.
+Because the repository now distinguishes implemented behavior from unsupported historical prose, model claims in this manuscript are limited to what can be verified directly from the preserved script, the deployed artifact set, and the current service contract. This means the present Methods section intentionally emphasizes model lineage, feature construction, and evaluation scope rather than speculative details about hyperparameter search or omitted preprocessing steps that are not yet fully recoverable from the legacy workspace.
 
 ### 3.3 Feature Representation
 
-The verified feature representation contains:
-- a 3,747-feature omics vector for each cell line
-- a 1,024-bit ECFP4 fingerprint for each submitted compound
+The verified predictor input consists of a cell-line omics vector concatenated with a compound fingerprint vector. The preserved omics matrix is stored in `GDSC_extracted_988_cell_lines_L1000_common_genes_3747_feature_vector_v1_selected_common_3_platform_v2.txt`, in which the first column is `CELL_LINE_NAME` and the remaining columns define a 3,747-feature numeric representation for each cell line. The available notebook and artifact evidence supports the statement that these features represent a shared L1000-based omics space used across the preserved cross-platform modeling workflow. However, the full upstream normalization and feature-selection derivation of this 3,747-feature matrix has not yet been fully reconstructed from notebook evidence and is therefore not described here beyond that verified minimum.
 
-The omics matrix is stored in `GDSC_extracted_988_cell_lines_L1000_common_genes_3747_feature_vector_v1_selected_common_3_platform_v2.txt`. The first column is `CELL_LINE_NAME`, and the remaining columns are numeric features. The chemical descriptor is generated on demand from SMILES using RDKit Morgan fingerprints with radius 2 and 1,024 bits.
-
-For each compound-cell-line pair, the service concatenates these two components into a 4,771-feature input vector.
+Compound features are generated directly from submitted SMILES strings using RDKit Morgan fingerprints with radius 2 and 1,024 bits, corresponding to an ECFP4-style representation. At inference time, the service pairs each compound fingerprint with every loaded cell-line omics vector and concatenates them into a 4,771-feature input vector. This combined representation is used consistently in the current public service and in the reconstructed baseline benchmark package, allowing the manuscript to describe the predictor input schema with precision even while acknowledging incomplete upstream provenance for the omics feature-generation stage.
 
 ### 3.4 Cell Line Metadata and Mapping
 
-The deployed service uses `GDSC_988_cell_line_name_main_fix_RRID_v1.txt` to map internal cell line identifiers to:
-- canonical display names
-- RRIDs
-- tissue labels
+Cell-line identity and metadata are handled through a preserved mapping table, `GDSC_988_cell_line_name_main_fix_RRID_v1.txt`, which is used by the deployed service to translate internal identifiers into canonical display names, RRIDs, and tissue labels. In the verified local copy, this file contains 988 rows and provides the metadata layer used in both the public prediction outputs and the current benchmark interpretation package. The availability of RRID-linked outputs is scientifically useful because it makes prediction results easier to align with external reference material and downstream biological interpretation than would anonymous internal identifiers alone.
 
-This file contains 988 rows and 29 distinct tissue labels in the verified local copy.
+The broader legacy notebook workspace indicates that cell-line harmonization historically relied on Cellosaurus-linked mapping logic, synonym tables, comment fields, and explicit manual alias correction in several dataset-specific workflows. The current repository therefore treats the deployed metadata table as the verified operational endpoint of a larger harmonization process. Where manuscript claims concern the live service or benchmark package, the evidence is the deployed mapping table itself; where claims concern broader harmonization across datasets, the evidence comes from notebook provenance rather than from a single packaged preprocessing pipeline.
 
 ### 3.5 Service Implementation
 
-The currently verified public deployment is the Hugging Face Space `ozcanumut/pic50-prediction-server`. The public file tree exposes:
-- `app.py`
-- `requirements.txt`
-- `Dockerfile`
-- the omics matrix
-- the cell line metadata table
-- the trained model artifact
+The currently verified public deployment is the Hugging Face Space `ozcanumut/pic50-prediction-server`, which exposes a Docker-hosted Flask service rather than a notebook-style demonstration interface. The public deployment and the maintained repository baseline now share the same core contract: the service accepts one or more SMILES strings, computes ECFP4 fingerprints, pairs each valid compound with all loaded GDSC cell lines, and returns grouped pIC50 predictions together with canonical cell-line name, RRID, and tissue metadata. The public API surface includes `GET /api/health`, `GET /api/info`, `POST /api/predict`, and `POST /api/predict/single`.
 
-The prediction service is implemented in Flask. It accepts one or more SMILES strings, computes ECFP4 fingerprints, pairs each compound with all loaded GDSC cell lines, and returns pIC50 predictions together with canonical cell line name, RRID, and tissue.
+The service layer is intentionally simple. It is designed to expose a reproducible baseline predictor rather than to embed downstream interpretation logic inside the serving path. This separation is useful for publication because it allows the manuscript to distinguish clearly between (i) the public inference surface that users interact with, (ii) the preserved model and metadata artifacts that support that surface, and (iii) the analytical layers in the repository that evaluate calibration, subgroup heterogeneity, uncertainty, applicability, and mechanism-aware annotation outside the production API contract.
 
 ### 3.6 Data Harmonization Scope
 
-The broader legacy workspace contains dataset-specific notebooks for GDSC, CCLE, NCI-60, FIMM, PRISM, CTRP, NCATS, and CellMiner-derived workflows. This verifies that PharmacoProfiler's historical scope extended beyond the deployed predictor and included notebook-driven harmonization across multiple public pharmacogenomic resources.
+The preserved notebook workspace shows that PharmacoProfiler was conceived as a broader harmonization project spanning multiple public pharmacogenomic resources, not only the currently deployed predictor. Decisive notebooks document dataset-specific preprocessing behavior for GDSC, CCLE, FIMM, NCI-60, NCATS, PRISM, CTRP, and CellMiner-linked resources, including response extraction, long-format reshaping, endpoint handling, compound metadata cleanup, cell-line alias correction, and identifier enrichment. Notebook-grounded evidence supports several concrete preprocessing statements used elsewhere in this manuscript: CCLE and FIMM workflows include IC50-to-pIC50 conversion, NCI-60 workflows preserve pGI50 framing, NCATS workflows reshape wide response matrices into long form with tissue mapping, and multiple mapping notebooks use Cellosaurus-derived fields plus manual corrections to align cell-line identifiers.
 
-At present, that harmonization layer is preserved as notebook provenance and supporting tables rather than a packaged pipeline.
+At the same time, the current repository does not yet package this broader harmonization layer as a single end-to-end reproducible pipeline. Instead, it preserves the harmonization scope through notebook provenance, evidence matrices, and manuscript-support notes. This is an important methodological boundary. The predictor and benchmark package described in this manuscript are fully tied to verified artifacts and scripts, whereas the wider cross-resource harmonization effort is supported primarily by historical notebooks and associated tables. The manuscript should therefore present PharmacoProfiler as having demonstrable multi-dataset harmonization provenance, while reserving stronger claims about a consolidated reusable harmonization pipeline for future work.
 
-The current repository also includes a notebook-grounded preprocessing note that can be used to rewrite the dataset and harmonization methods sections without inventing unsupported steps:
+The detailed notebook-grounded preprocessing evidence used to support this section is summarized in [preprocessing-methods-from-notebooks.md](preprocessing-methods-from-notebooks.md).
 
-- [preprocessing-methods-from-notebooks.md](preprocessing-methods-from-notebooks.md)
+Together, these verified components define the operational PharmacoProfiler baseline evaluated in the current repository: a metadata-aware public prediction service grounded in preserved model artifacts, notebook-supported preprocessing provenance, and a benchmark package designed to test both overall predictive signal and its limitations.
 
-## 4. Results Baseline
+## 4. Results
 
-### 4.1 Verified Claims
+The current repository supports a verified cross-domain pIC50 prediction baseline in which a Random Forest trained on GDSC-style examples is evaluated on a reconstructed CCLE overlap set and exposed through a public SMILES-to-cell-line inference service enriched with canonical cell line names, RRIDs, and tissue labels. In the current code-backed benchmark, the reconstructed CCLE evaluation set contains `6513` evaluable response rows spanning `16` overlapping drugs and `434` overlapping cell lines. On this set, the baseline achieved Pearson `0.7556`, Spearman `0.6273`, MAE `0.6548`, RMSE `0.8361`, and `R² = 0.2633` (Figure 1; supplementary Figure 3). These values support a reproducible cross-domain ranking signal, but not a claim of uniformly strong explanatory performance across all evaluated contexts.
 
-The current repository supports these defensible claims:
-- PharmacoProfiler implements cross-domain pIC50 prediction with a Random Forest baseline trained on GDSC and evaluated on CCLE.
-- The deployed service publicly serves per-cell-line predictions from SMILES input.
-- Prediction outputs are enriched with canonical cell line names, RRIDs, and tissue labels.
-- The current-repo packaged baseline run over the reconstructed CCLE evaluation set achieved Pearson `0.7556`, Spearman `0.6273`, MAE `0.6548`, RMSE `0.8361`, and R² `0.2633`.
-- Bootstrap `95%` confidence intervals for the current baseline are now available, including Pearson `0.7416-0.7685` and RMSE `0.8199-0.8524`.
-- The current subgroup outputs now use a canonical tissue-normalization layer for manuscript-facing reporting while preserving raw-label audit tables.
+The benchmark structure also shows that global correlation alone would understate the main limitations of the current model. Figure 5 demonstrates a clear calibration problem, with mean signed error `-0.4943`, underprediction in `85.0%` of rows, calibration slope `0.7404`, and intercept `1.0075`. In practical terms, the model compresses dynamic range and increasingly undercalls stronger responses rather than failing uniformly at random. This limitation is reinforced by the potency-bin analysis and by the largest failure cases, which concentrate in high-response examples from haematopoietic and lymphoid tissue, bone marrow, pleural effusion, and pancreas-associated contexts (supplementary Figure 4).
 
-### 4.2 Claims that still require rerun evidence
+Performance heterogeneity is also visible across subgroup and compound views. Normalized tissue reporting now collapses obvious label aliases into canonical manuscript-facing groups, allowing subgroup reporting without rewriting the underlying legacy assets. The resulting tissue summaries show non-uniform error profiles across major context groups, while the compound-level analysis shows that some overlapping drugs transfer comparatively well and others remain dominated by large error or systematic underprediction (Figure 6; supplementary Figure 2). Bootstrap `95%` confidence intervals further support this benchmark framing by showing that the current point estimates are stable enough to report, but still bounded by measurable uncertainty rather than a single deterministic score (supplementary Figure 3).
 
-The following should not be presented as final benchmark results:
-- baseline-model comparisons
-- leakage-safe benchmark claims across multiple split policies
+The repository now also supports a leakage-sensitive split-policy comparison through the completed staged `ridge` sweep on the preserved GDSC table. Under permissive `pair_random` splits, the ridge comparator remained strong (MAE `0.4056`, `R² = 0.7775`). Under `cell_line_holdout`, performance remained materially stronger than drug-holdout performance (MAE `0.4767`, `R² = 0.7033`), whereas both `compound_holdout` (MAE `0.9037`, `R² = -0.0353`) and `double_cold_start` (MAE `0.9363`, `R² = -0.1093`) were substantially weaker (Figure 11). This staged result sharpens the benchmark story by showing that leakage-sensitive weakness is concentrated more strongly along the unseen-compound axis than the unseen-cell-line axis. It also indicates that row-random performance should not be interpreted as strong unseen-drug generalization.
 
-Use [../supplementary/benchmark-reproducibility-baseline.md](../supplementary/benchmark-reproducibility-baseline.md) as the current benchmark baseline and rerun checklist.
-Use [normalization-and-benchmark-evidence.md](normalization-and-benchmark-evidence.md) as the canonical manuscript note for normalized subgroup evidence, calibration caveats, and manuscript-safe wording.
-Use [preprocessing-methods-from-notebooks.md](preprocessing-methods-from-notebooks.md) for notebook-grounded dataset preprocessing and harmonization wording.
+Together, these results support a conservative but publishable current claim: PharmacoProfiler provides a reproducible predictive baseline with measurable cross-domain and within-dataset signal, but that signal is accompanied by calibration weakness, subgroup heterogeneity, and much weaker generalization when compounds are held out. The strongest present evidence therefore supports a harmonization-plus-serving platform with a transparent benchmark package rather than a finalized high-rigor methods benchmark across multiple model families.
 
-When the current-repo benchmark is executed, quantitative results should be cited from:
-- `models/evaluation/legacy_pic50_baseline/benchmark_summary.json`
-- `models/evaluation/legacy_pic50_baseline/metrics.tsv`
+Use [../supplementary/benchmark-results-index.md](../supplementary/benchmark-results-index.md) as the single entry point for the current benchmark evidence package. Use [../supplementary/leakage-safe-benchmark-results.md](../supplementary/leakage-safe-benchmark-results.md) and [../supplementary/leakage-safe-ridge-regime-table.md](../supplementary/leakage-safe-ridge-regime-table.md) for the current leakage-sensitive regime comparison. The current benchmark should still be described with two explicit caveats: the CCLE evaluation input is reconstructed from preserved raw files, and the deployed `v4` model artifact emits a scikit-learn version compatibility warning during load.
 
-The current benchmark should be described with two explicit caveats:
-- the CCLE evaluation input is reconstructed from preserved raw files
-- the deployed `v4` model artifact emits a scikit-learn version compatibility warning during load
+These results provide the basis for a discussion centered on scope control rather than overclaiming. The key question is not whether PharmacoProfiler already constitutes a state-of-the-art predictive methods contribution, but whether the current repository now supports a transparent and publishable platform baseline with clearly defined strengths, weaknesses, and next methodological priorities.
 
-For publishable wording on strengths, weaknesses, and next-step analyses, see [normalization-and-benchmark-evidence.md](normalization-and-benchmark-evidence.md) and [../supplementary/publication-readiness-analysis.md](../supplementary/publication-readiness-analysis.md).
+### 4.3 Recommended Figure Placement
+
+The current revision should prioritize the following primary figure order in the main text:
+
+1. Figure 1: legacy benchmark overview
+2. Figure 5: calibration detail
+3. Figure 6: subgroup variability
+4. Figure 11: leakage-safe regime comparison
+5. Figure 7: competitive positioning comparison
+
+The following should be treated as supplemental support for the benchmark/results narrative:
+
+1. Figure 3: bootstrap confidence intervals
+2. Figure 2: drug-level variability
+3. Figure 4: top-error examples
+
+## 5. Discussion
+
+The present evidence supports PharmacoProfiler as a reproducible pharmacogenomics platform with an operational prediction service and a transparent, code-backed benchmark baseline, but not yet as a completed high-rigor predictive methods paper. The most defensible contribution at this stage is the combination of harmonized pharmacogenomic context, metadata-rich public inference serving, and a benchmark package that now makes both strengths and weaknesses explicit. That framing is stronger and more scientifically defensible than positioning the project primarily as a state-of-the-art model innovation effort.
+
+The most important limitation is calibration weakness rather than generic model imperfection. The current baseline compresses dynamic range, undercalls stronger responses, and shows measurable subgroup heterogeneity across tissues and compounds. This matters scientifically because the strongest-response regime is also the region most likely to be emphasized in pharmacogenomic prioritization and translational interpretation. The manuscript should therefore avoid any wording that implies stable uniform predictive performance across the evaluated space and instead present bias, heterogeneity, and failure concentration as observed properties of the current baseline.
+
+The completed leakage-safe ridge comparison strengthens this limitation framing substantially. Performance remains relatively strong when only cell lines are held out, but deteriorates sharply when compounds are held out and remains weakest under the double-cold-start regime. This implies that the current feature representation is more robust to unseen cell-line contexts than to unseen-drug novelty. That distinction is scientifically important because it separates two common but very different generalization questions that are often blurred by permissive split policies. In the current manuscript, Figure 11 should therefore be used not as an auxiliary sensitivity check, but as central evidence that leakage-sensitive benchmarking changes the interpretation of model performance.
+
+The current results also clarify the most useful next methodological steps. The evidence argues more strongly for calibrated uncertainty outputs, stronger applicability-domain analysis, broader comparator benchmarking, and deeper mechanism-aware interpretation than for immediate architectural escalation to a more complex model. A first-pass uncertainty layer is already available, but it remains under-calibrated and should be framed as exploratory reliability analysis rather than as a final predictive interval method. Likewise, the current mechanism-aware annotation layer improves biological context and follow-up value, but should still be presented as an interpretation scaffold rather than as proof that the model has learned mechanistic relationships.
+
+From a publication strategy perspective, the project is now strongest as a platform-and-baseline paper whose credibility comes from careful scope control, benchmark transparency, and explicit limitation framing. A stronger methods paper remains possible, but it would require at least three upgrades beyond the current baseline: a completed leakage-safe multi-model comparison, calibrated uncertainty or applicability outputs, and a deeper biological-validation layer that connects predictions to biomarker, pathway, or mechanism-level evidence. Until those are complete, the most credible manuscript position is that PharmacoProfiler offers a useful, reproducible foundation for pharmacogenomic prediction and exploration, while also making clear where its current predictive limits lie.

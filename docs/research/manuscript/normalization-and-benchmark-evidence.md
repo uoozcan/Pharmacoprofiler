@@ -89,6 +89,27 @@ Potency-bin analysis shows deterioration in the strongest-response region:
 
 Representative failure examples are recorded in `top_error_examples.tsv`.
 
+## First-pass uncertainty and applicability evidence
+
+The current repository now contains an initial uncertainty/applicability extension for the preserved Random Forest baseline:
+
+- `models/evaluation/legacy_pic50_baseline/uncertainty_applicability_summary.json`
+- `models/evaluation/legacy_pic50_baseline/uncertainty_bin_metrics.tsv`
+- `models/evaluation/legacy_pic50_baseline/applicability_bin_metrics.tsv`
+- `docs/research/supplementary/uncertainty-applicability-analysis.md`
+
+The main findings are:
+
+- mean per-sample tree prediction standard deviation: `0.6032`
+- empirical coverage of the nominal tree-based 90% interval: `0.7371`
+- Pearson correlation between prediction spread and absolute error: `0.2273`
+- Pearson correlation between nearest-train cell-line similarity and cell-line MAE: `-0.0916`
+
+These results support two manuscript-safe conclusions:
+
+- the preserved Random Forest already exposes a useful internal uncertainty signal
+- the current interval and applicability proxies are not yet strong enough to be presented as calibrated or final reliability layers
+
 ## Manuscript-safe wording
 
 ### Strengths
@@ -97,14 +118,14 @@ Representative failure examples are recorded in `top_error_examples.tsv`.
 
 ### Limitations
 
-`The current benchmark remains a reconstructed GDSC-to-CCLE transfer baseline and shows systematic underprediction, reduced dynamic range at higher pIC50 values, and subgroup variability that should be stated explicitly rather than abstracted into a single global performance claim.`
+`The current benchmark remains a reconstructed GDSC-to-CCLE transfer baseline and shows systematic underprediction, reduced dynamic range at higher pIC50 values, subgroup variability, and under-calibrated first-pass uncertainty outputs that should be stated explicitly rather than abstracted into a single global performance claim.`
 
 ## Next required analyses before stronger claims
 
 Before stronger methodological or translational claims, the repository should add:
 
-1. leakage-safe split regimes
+1. training/evaluation results under the saved leakage-safe split regimes now defined in `models/evaluation/benchmark_design/`
 2. baseline-model comparisons
 3. calibrated vs uncalibrated evaluation
-4. uncertainty or applicability-domain outputs
+4. calibrated uncertainty or stronger applicability-domain methods beyond the current first-pass proxies
 5. broader tissue ontology review beyond the current reporting-layer normalization

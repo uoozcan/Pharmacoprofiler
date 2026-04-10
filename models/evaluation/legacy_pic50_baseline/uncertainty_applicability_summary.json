@@ -1,0 +1,45 @@
+{
+  "analysis_name": "legacy_pic50_uncertainty_and_applicability",
+  "run_timestamp_utc": "2026-04-03T11:03:34.327172+00:00",
+  "ccle_response_source": {
+    "source_mode": "reconstructed_from_raw",
+    "source_path": "/home/umut/projects/pharmacoprofiler_legacy/Cellminer/CCLE/CCLE_actual_drug_response_v1.txt",
+    "reconstructed": true,
+    "raw_rows": 11273,
+    "reconstructed_rows": 6513,
+    "unique_drugs_after_mapping": 16,
+    "unique_cell_lines_after_mapping": 434
+  },
+  "artifacts": {
+    "omics_matrix": "/home/umut/projects/pharmacoprofiler_legacy/CLRB_MODELLING/GDSC_extracted_988_cell_lines_L1000_common_genes_3747_feature_vector_v1_selected_common_3_platform_v2.txt",
+    "cell_line_metadata": "/home/umut/projects/pharmacoprofiler_legacy/CLRB_MODELLING/GDSC_988_cell_line_name_main_fix_RRID_v1.txt",
+    "trained_model": "/home/umut/projects/pharmacoprofiler_legacy/CLRB_MODELLING/pharmacoprofiler_docker/pharmacoprofiler/huggingface_profile/GDSC_CCLE_cross_domain_mode_7_v4.joblib"
+  },
+  "global": {
+    "rows": 6513,
+    "cell_lines": 434,
+    "drugs": 16,
+    "mean_prediction_std": 0.6031883955001831,
+    "median_prediction_std": 0.5792655944824219,
+    "tree_interval_90_coverage": 0.7371411024105635,
+    "uncertainty_vs_absolute_error_pearson": 0.22733468744530813,
+    "cell_line_similarity_vs_mae_pearson": -0.091580725000626
+  },
+  "highest_uncertainty_bin": {
+    "uncertainty_bin": "Q5 highest",
+    "n": 1303,
+    "mean_prediction_std": 0.9312406778335571,
+    "mae": 0.8743691097918947,
+    "rmse": 1.0695968131517943,
+    "interval_coverage_90": 0.7689946277820414,
+    "mean_signed_error": -0.5744180953472173
+  },
+  "lowest_applicability_bin": {
+    "applicability_bin": "Q1 lowest",
+    "n": 1316,
+    "mean_nearest_train_cosine": 0.92961680082927,
+    "mae": 0.6766294921631617,
+    "mean_prediction_std": 0.6156180500984192,
+    "mean_signed_error": -0.5233060663740493
+  }
+}

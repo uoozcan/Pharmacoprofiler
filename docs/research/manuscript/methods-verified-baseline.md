@@ -73,6 +73,13 @@ Bootstrap confidence intervals, calibration findings, and normalized subgroup ev
 - `models/evaluation/legacy_pic50_baseline/potency_bin_metrics.tsv`
 - `docs/research/manuscript/normalization-and-benchmark-evidence.md`
 
+The current repository also contains a first-pass uncertainty and applicability analysis for the preserved Random Forest baseline. These outputs are recorded in:
+
+- `models/evaluation/legacy_pic50_baseline/uncertainty_applicability_summary.json`
+- `models/evaluation/legacy_pic50_baseline/uncertainty_bin_metrics.tsv`
+- `models/evaluation/legacy_pic50_baseline/applicability_bin_metrics.tsv`
+- `docs/research/supplementary/uncertainty-applicability-analysis.md`
+
 These values should be cited as the current repository baseline only together with the explicit caveat that the benchmark uses a reconstructed CCLE evaluation input and a deployed `v4` model artifact that emits a scikit-learn version compatibility warning at load time.
 
 At this stage, the correct manuscript framing is:
@@ -81,10 +88,28 @@ At this stage, the correct manuscript framing is:
 - the public serving layer is verified
 - a reproducible current-repo benchmark baseline is available for inclusion in figures or claims, with normalized tissue reporting now defined for manuscript tables and figures
 
+## 4.2 Figure-Linked Reporting Guidance
+
+The current manuscript revision should anchor the benchmark narrative to the generated figure set under `docs/research/figures/` rather than to standalone summary prose.
+
+Use the following figure pairings for quantitative reporting:
+- Figure 1 (`legacy_benchmark_overview`) for the main benchmark overview and the claim that the baseline preserves useful cross-domain ranking signal while remaining biased and only partially explanatory
+- Supplementary Figure 3 (`legacy_benchmark_confidence_intervals`) for bootstrap confidence intervals around Pearson, Spearman, MAE, RMSE, and R²
+- Figure 5 (`legacy_benchmark_calibration`) for the calibration limitation statement covering mean signed error, underprediction frequency, and compressed dynamic range
+- Figure 6 (`legacy_benchmark_subgroup_variability`) for normalized tissue-level heterogeneity and drug-level bias variation
+- Supplementary Figure 2 (`legacy_benchmark_drug_mae`) for compound-specific error spread
+- Supplementary Figure 4 (`legacy_benchmark_top_errors`) for representative failure cases in the strongest-response regime
+- Figure 7 (`platform_positioning_comparison`) for Introduction or Discussion text about current differentiation versus competing resources and predictive-model papers
+- Supplementary Figure 8 (`legacy_benchmark_uncertainty`) for first-pass uncertainty behavior and interval under-coverage
+- Supplementary Figure 9 (`legacy_benchmark_applicability`) for first-pass applicability-domain behavior based on nearest-train cell-line similarity
+
+For manuscript-ready legends and paragraph mapping, use `docs/research/figures/figure_legends_and_mapping.md`. For manuscript-safe wording on normalized subgroup evidence and calibration caveats, use `docs/research/manuscript/normalization-and-benchmark-evidence.md`. For uncertainty/applicability wording, use `docs/research/supplementary/uncertainty-applicability-analysis.md`.
+
 ## What should not be claimed from current evidence
 
 The following points remain insufficiently verified from the current codebase and should not appear as fixed implementation facts without additional evidence:
 - exact preprocessing steps such as quantile normalization or KNN imputation
 - exact multi-omics composition beyond the verified numeric feature matrix
-- confidence intervals or baseline-model comparisons that have not yet been generated
+- calibrated prediction intervals, conformal uncertainty estimates, or finalized applicability-domain methods
+- completed multi-model leakage-safe benchmark comparisons beyond the staged ridge sweep
 - current production frontend stack for `pharmacoprofiler.com`

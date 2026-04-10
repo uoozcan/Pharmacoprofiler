@@ -1,0 +1,176 @@
+{
+  "design_name": "legacy_pic50_leakage_safe_benchmark_design",
+  "run_timestamp_utc": "2026-04-03T13:22:49.986468+00:00",
+  "source_rows": 337761,
+  "source_drugs": 403,
+  "source_cell_lines": 986,
+  "target_column": "pIC50",
+  "regimes": [
+    {
+      "regime_name": "pair_random",
+      "fold_column": "pair_random_fold",
+      "fold_counts": [
+        {
+          "fold": 0,
+          "count": 67553
+        },
+        {
+          "fold": 1,
+          "count": 67552
+        },
+        {
+          "fold": 2,
+          "count": 67552
+        },
+        {
+          "fold": 3,
+          "count": 67552
+        },
+        {
+          "fold": 4,
+          "count": 67552
+        }
+      ],
+      "rows": 337761
+    },
+    {
+      "regime_name": "compound_holdout",
+      "fold_column": "compound_holdout_fold",
+      "fold_counts": [
+        {
+          "fold": 0,
+          "count": 69755
+        },
+        {
+          "fold": 1,
+          "count": 67803
+        },
+        {
+          "fold": 2,
+          "count": 67611
+        },
+        {
+          "fold": 3,
+          "count": 65849
+        },
+        {
+          "fold": 4,
+          "count": 66743
+        }
+      ],
+      "rows": 337761,
+      "unique_entity_counts": [
+        {
+          "fold": 0,
+          "unique_entities": 81
+        },
+        {
+          "fold": 1,
+          "unique_entities": 81
+        },
+        {
+          "fold": 2,
+          "unique_entities": 81
+        },
+        {
+          "fold": 3,
+          "unique_entities": 80
+        },
+        {
+          "fold": 4,
+          "unique_entities": 80
+        }
+      ]
+    },
+    {
+      "regime_name": "cell_line_holdout",
+      "fold_column": "cell_line_holdout_fold",
+      "fold_counts": [
+        {
+          "fold": 0,
+          "count": 67291
+        },
+        {
+          "fold": 1,
+          "count": 66428
+        },
+        {
+          "fold": 2,
+          "count": 67787
+        },
+        {
+          "fold": 3,
+          "count": 68880
+        },
+        {
+          "fold": 4,
+          "count": 67375
+        }
+      ],
+      "rows": 337761,
+      "unique_entity_counts": [
+        {
+          "fold": 0,
+          "unique_entities": 198
+        },
+        {
+          "fold": 1,
+          "unique_entities": 197
+        },
+        {
+          "fold": 2,
+          "unique_entities": 197
+        },
+        {
+          "fold": 3,
+          "unique_entities": 197
+        },
+        {
+          "fold": 4,
+          "unique_entities": 197
+        }
+      ]
+    },
+    {
+      "regime_name": "double_cold_start",
+      "fold_logic": "test rows where compound_holdout_fold == cell_line_holdout_fold == fold",
+      "eligible_test_rows": 67675,
+      "fold_summaries": [
+        {
+          "fold": 0,
+          "test_rows": 13924,
+          "test_drugs": 81,
+          "test_cell_lines": 198
+        },
+        {
+          "fold": 1,
+          "test_rows": 13360,
+          "test_drugs": 81,
+          "test_cell_lines": 196
+        },
+        {
+          "fold": 2,
+          "test_rows": 13574,
+          "test_drugs": 81,
+          "test_cell_lines": 197
+        },
+        {
+          "fold": 3,
+          "test_rows": 13515,
+          "test_drugs": 80,
+          "test_cell_lines": 197
+        },
+        {
+          "fold": 4,
+          "test_rows": 13302,
+          "test_drugs": 80,
+          "test_cell_lines": 197
+        }
+      ]
+    }
+  ],
+  "seeds": {
+    "pair_random_seed": 11,
+    "entity_random_seed": 17
+  }
+}

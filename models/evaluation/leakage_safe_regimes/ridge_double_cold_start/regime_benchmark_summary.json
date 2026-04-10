@@ -1,0 +1,21 @@
+{
+  "runner_name": "legacy_pic50_leakage_safe_runner",
+  "run_timestamp_utc": "2026-04-04T13:02:10.921579+00:00",
+  "models": [
+    "ridge"
+  ],
+  "rows_used": 337761,
+  "regimes": [
+    {
+      "regime_name": "double_cold_start",
+      "model_name": "ridge",
+      "folds": 5,
+      "mean_mae": 0.9362783503666812,
+      "mean_rmse": 1.192348829902432,
+      "mean_pearson_r": 0.3682133169760528,
+      "mean_spearman_r": 0.3319323201580236,
+      "mean_r_squared": -0.10930963328678615,
+      "total_test_rows": 67675
+    }
+  ]
+}

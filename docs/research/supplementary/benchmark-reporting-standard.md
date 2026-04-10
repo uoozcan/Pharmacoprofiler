@@ -56,6 +56,18 @@ Must add before stronger generalization claims:
 - saved split definitions
 - confidence intervals on each benchmark regime
 
+Current saved split-design outputs now exist for this stage:
+
+- `models/evaluation/benchmark_design/gdsc_split_registry.tsv`
+- `models/evaluation/benchmark_design/benchmark_split_design_summary.json`
+- `models/evaluation/benchmark_design/benchmark_split_regime_counts.tsv`
+- `docs/research/supplementary/leakage-safe-benchmark-design.md`
+
+Interpretation rule:
+
+- Stage 3 split artifacts can now be cited as the canonical design layer for future model-comparison runs
+- stronger generalization claims still require actual training/evaluation results under these saved regimes
+
 ### Stage 4: deployment-strengthening metrics
 
 Must add before stronger translational claims:

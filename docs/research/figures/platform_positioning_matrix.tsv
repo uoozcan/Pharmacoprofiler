@@ -1,0 +1,7 @@
+tool	cross_resource_harmonization	public_inference_serving	metadata_rich_outputs	benchmark_transparency	single_agent_prediction_focus	combination_analysis_focus	model_method_innovation
+Pharmacoprofiler	2	2	2	2	2	0	0
+PharmacoDB 2.0	2	0	1	1	0	0	0
+CellMinerCDB	2	0	1	1	0	0	0
+DrugComb	2	0	1	1	0	2	0
+PharmacoGx	2	0	1	2	0	0	0
+Modern DL Models	0	0	0	0	2	0	2

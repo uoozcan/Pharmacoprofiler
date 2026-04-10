@@ -1,0 +1,16 @@
+{
+  "runner_name": "legacy_pic50_leakage_safe_runner",
+  "description": "Cross-validation runner for the saved leakage-safe GDSC split regimes.",
+  "legacy_root": "/home/umut/projects/pharmacoprofiler_legacy/CLRB_MODELLING",
+  "gdsc_response_path": "GDSC_drug_response_drugs_w_smiles_988cl_404dr_337K_v4_w_fps.txt",
+  "gdsc_omics_path": "GDSC_extracted_988_cell_lines_L1000_common_genes_3747_feature_vector_v1_selected_common_3_platform_v2.txt",
+  "split_registry_path": "models/evaluation/benchmark_design/gdsc_split_registry.tsv",
+  "output_dir": "models/evaluation/leakage_safe_regimes",
+  "drug_column": "DRUG_NAME_edited",
+  "cell_line_column": "CELL_LINE_NAME_edited",
+  "target_column": "pIC50",
+  "models": [
+    "legacy_rf",
+    "ridge"
+  ]
+}

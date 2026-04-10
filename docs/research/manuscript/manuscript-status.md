@@ -18,7 +18,10 @@ Use these as source material, not as final publishable text:
 - `archive/legacy-manuscript-materials/a_CLRB_RESEARCH_ARTICLE/PharmacoProfile1.docx`
 - `archive/legacy-manuscript-materials/a_CLRB_RESEARCH_ARTICLE/issues_v1.docx`
 - reviewer markdown files preserved from the legacy workspace
+- `canonical-manuscript-draft.md`, the implementation-grounded baseline assembled from verified repository evidence
+- `author-working-draft.md`, the evidence-linked author version for revision work
+- `submission-manuscript-draft.md`, the cleaner manuscript version for journal-facing editing
 
 ## Required Next Step
 
-Replace manuscript methods and results text only after importing the actual application, pipeline, and prediction-service code or after documenting those implementations from verified source material.
+Continue polishing from the two-draft structure: use `author-working-draft.md` when internal evidence links and figure-placement notes are needed, and use `submission-manuscript-draft.md` for prose-level journal editing. Any new scientific claim should still be added first to the evidence-linked author draft and only then promoted into the submission-facing draft.

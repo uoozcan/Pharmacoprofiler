@@ -98,8 +98,8 @@ Pharmacoprofiler's current gap versus stronger model-method papers is:
 
 - no uncertainty estimates
 - limited interpretability
-- no explicit leakage-safe multi-split benchmark suite
-- no confidence intervals or baseline-model comparisons yet
+- leakage-safe evidence is currently ridge-only rather than a completed multi-model benchmark suite
+- confidence intervals now exist for the current baseline metrics, but full multi-model baseline comparisons remain pending
 - no deeper biomarker or mechanism layer in the public workflow
 
 ## Innovation opportunities

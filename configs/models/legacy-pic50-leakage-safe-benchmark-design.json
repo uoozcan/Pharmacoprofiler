@@ -1,0 +1,16 @@
+{
+  "design_name": "legacy_pic50_leakage_safe_benchmark_design",
+  "description": "Deterministic split-design configuration for stronger GDSC benchmark regimes around the verified legacy pIC50 predictor.",
+  "legacy_root": "/home/umut/projects/pharmacoprofiler_legacy/CLRB_MODELLING",
+  "gdsc_response_path": "GDSC_drug_response_drugs_w_smiles_988cl_404dr_337K_v4_w_fps.txt",
+  "output_dir": "models/evaluation/benchmark_design",
+  "target_column": "pIC50",
+  "drug_column": "DRUG_NAME_edited",
+  "cell_line_column": "CELL_LINE_NAME_edited",
+  "pair_random_seed": 11,
+  "entity_random_seed": 17,
+  "pair_random_folds": 5,
+  "compound_holdout_folds": 5,
+  "cell_line_holdout_folds": 5,
+  "double_cold_start_folds": 5
+}
