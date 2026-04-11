@@ -56,4 +56,4 @@ This result addresses the main benchmarking criticism more directly than the ear
 
 1. keep the legacy RF comparator marked pending because the attempted `rf_pair_random` run produced no result files
 2. extend the leakage-safe comparison from ridge-only into a multi-model figure and table
-3. rerun an additional comparator only after the current publication package is committed and the compute budget/runtime strategy is chosen
+3. rerun an additional comparator only after the current publication package is stable and the compute budget/runtime strategy is chosen

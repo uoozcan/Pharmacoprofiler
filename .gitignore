@@ -54,3 +54,6 @@ htmlcov/
 
 # Local archival workspace
 archive/legacy-manuscript-materials/
+
+# Local presentation/export artifacts
+pharmacoprofiler_presentation.html

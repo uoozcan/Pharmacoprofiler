@@ -255,4 +255,4 @@ This file is the running project notebook for repository restructuring, benchmar
 - upstream omics normalization and feature-selection provenance is still only partially reconstructed from notebooks
 - broader multi-dataset harmonization is preserved as notebook provenance, not yet a packaged end-to-end pipeline
 - direct verification of the `pharmacoprofiler.com` frontend/runtime remains incomplete from this environment
-- `pharmacoprofiler_presentation.html` is currently treated as local-only unless intentionally promoted into the repository later
+- `pharmacoprofiler_presentation.html` is treated as a local-only export artifact and is now ignored unless intentionally promoted into the repository later
