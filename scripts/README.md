@@ -80,6 +80,12 @@ The following scripts are the maintained baseline for benchmark reproducibility 
      - `models/evaluation/leakage_safe_regimes/regime_summary.tsv`
      - `models/evaluation/leakage_safe_regimes/regime_predictions.tsv`
      - `models/evaluation/leakage_safe_regimes/regime_benchmark_summary.json`
+10. `evaluate/build_leakage_safe_model_comparison.py`
+   - aggregates completed per-model regime summaries into a canonical multi-model comparison shell
+   - expected input: completed `regime_summary.tsv` files under `models/evaluation/leakage_safe_regimes/`
+   - expected outputs:
+     - `models/evaluation/leakage_safe_regimes/multi_model_regime_comparison.tsv`
+     - `models/evaluation/leakage_safe_regimes/multi_model_regime_status.json`
 
 ## Recommended Run Order
 
@@ -94,6 +100,7 @@ Use the scripts in this order:
 7. `python3 scripts/evaluate/generate_legacy_uncertainty_figures.py`
 8. `python3 scripts/evaluate/design_legacy_benchmark_splits.py`
 9. `python3 scripts/evaluate/run_legacy_leakage_safe_benchmarks.py`
+10. `python3 scripts/evaluate/build_leakage_safe_model_comparison.py`
 
 Optional overrides supported by the maintained evaluation scripts:
 
@@ -107,8 +114,10 @@ Optional overrides supported by the maintained evaluation scripts:
 - The legacy runtime artifacts must remain available at the paths described in `configs/models/legacy-pic50-artifacts.json`.
 - The evaluation layer is designed to emit stable machine-readable outputs and short run summaries only; exploratory notebook-style printing should not be added back into these scripts.
 - The uncertainty/applicability layer is still a first-pass analysis. Its outputs are manuscript-support artifacts and should not yet be treated as calibrated public prediction intervals.
-- The split-design layer creates saved benchmark regimes and reporting artifacts. The staged `ridge` execution has completed across all saved regimes; full multi-model execution remains pending.
+- The split-design layer creates saved benchmark regimes and reporting artifacts. The staged `ridge` execution has completed across all saved regimes, and the runner now supports a second lightweight `ols` comparator under the same saved split registry.
+- The comparison-builder layer should be run after each completed comparator sweep so the multi-model TSV and status JSON stay current while heavier model runs are still pending.
 - Full leakage-safe regime execution is substantially heavier than the baseline benchmark and should be run from the benchmark virtual environment, using `--models` and `--regimes` to validate subsets before launching larger model matrices.
+- The legacy Random Forest comparator remains optional and pending because the prior `rf_pair_random` run did not produce result files.
 
 ## Directory Maturity
 

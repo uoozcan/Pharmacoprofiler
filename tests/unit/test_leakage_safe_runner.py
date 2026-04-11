@@ -19,18 +19,24 @@ if SPEC is not None and SPEC.loader is not None and MODULE is not None:
     sys.modules[SPEC.name] = MODULE
     SPEC.loader.exec_module(MODULE)
     fit_predict_chunked_ridge = MODULE.fit_predict_chunked_ridge
+    fit_predict_chunked_ols = MODULE.fit_predict_chunked_ols
     fold_masks = MODULE.fold_masks
     materialize_feature_memmap = MODULE.materialize_feature_memmap
     summarize_regime_metrics = MODULE.summarize_regime_metrics
 else:  # pragma: no cover
     fit_predict_chunked_ridge = None
+    fit_predict_chunked_ols = None
     fold_masks = None
     materialize_feature_memmap = None
     summarize_regime_metrics = None
 
 
 @unittest.skipIf(
-    fold_masks is None or summarize_regime_metrics is None or fit_predict_chunked_ridge is None or materialize_feature_memmap is None,
+    fold_masks is None
+    or summarize_regime_metrics is None
+    or fit_predict_chunked_ridge is None
+    or fit_predict_chunked_ols is None
+    or materialize_feature_memmap is None,
     "Leakage-safe runner module could not be loaded",
 )
 class LeakageSafeRunnerTest(unittest.TestCase):
@@ -93,6 +99,39 @@ class LeakageSafeRunnerTest(unittest.TestCase):
             omics_lookup=omics_lookup,
             fingerprint_lookup=fingerprint_lookup,
             alpha=1e-6,
+            chunk_size=1,
+        )
+        self.assertEqual(len(predictions), 2)
+        self.assertAlmostEqual(float(predictions[0]), 1.0, places=4)
+        self.assertAlmostEqual(float(predictions[1]), 2.0, places=4)
+
+    def test_chunked_ols_recovers_simple_linear_signal(self):
+        feature_df = pd.DataFrame(
+            {
+                "source_row_id": [0, 1, 2, 3],
+                "DRUG_NAME_edited": ["drug_a", "drug_a", "drug_b", "drug_b"],
+                "CELL_LINE_NAME_edited": ["cell_1", "cell_2", "cell_1", "cell_2"],
+                "pIC50": [1.0, 2.0, 1.0, 2.0],
+                "pair_random_fold": [0, 0, 1, 1],
+                "compound_holdout_fold": [0, 0, 1, 1],
+                "cell_line_holdout_fold": [0, 1, 0, 1],
+                "double_cold_start_fold": [0, 1, 0, 1],
+            }
+        )
+        omics_lookup = {
+            "cell_1": pd.Series([0.0, 1.0], dtype="float32").to_numpy(),
+            "cell_2": pd.Series([1.0, 1.0], dtype="float32").to_numpy(),
+        }
+        fingerprint_lookup = {
+            "drug_a": pd.Series([1.0, 0.0], dtype="float32").to_numpy(),
+            "drug_b": pd.Series([1.0, 1.0], dtype="float32").to_numpy(),
+        }
+        predictions = fit_predict_chunked_ols(
+            feature_df,
+            train_index=pd.Index([0, 1]).to_numpy(),
+            test_index=pd.Index([2, 3]).to_numpy(),
+            omics_lookup=omics_lookup,
+            fingerprint_lookup=fingerprint_lookup,
             chunk_size=1,
         )
         self.assertEqual(len(predictions), 2)

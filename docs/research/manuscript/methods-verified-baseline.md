@@ -20,6 +20,8 @@ The verified feature representation contains two parts.
 
 For cell lines, PharmacoProfiler uses a fixed-length omics vector stored in `GDSC_extracted_988_cell_lines_L1000_common_genes_3747_feature_vector_v1_selected_common_3_platform_v2.txt`. The file contains `CELL_LINE_NAME` plus 3,747 numeric features.
 
+The preserved legacy workspace contains parallel matrix artifacts for GDSC, CCLE, and NCI-60 with the same `L1000_common_genes_3747_feature_vector_v1_selected_common_3_platform_v2` naming pattern. This supports a stronger methods-safe statement that the predictor consumes a shared cross-platform omics feature space rather than a single dataset-specific matrix. The current evidence still does not recover the full upstream normalization and feature-selection derivation of these prepared matrices, so those steps should continue to be described as preserved provenance rather than fully reconstructed preprocessing. See `docs/research/supplementary/omics-feature-provenance.md`.
+
 For compounds, PharmacoProfiler computes a 1,024-bit ECFP4 fingerprint from each submitted SMILES string using RDKit (`GetMorganFingerprintAsBitVect` with radius 2 and 1,024 bits).
 
 At inference time, the model concatenates:

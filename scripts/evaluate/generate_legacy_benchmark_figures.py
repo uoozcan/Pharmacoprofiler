@@ -17,6 +17,7 @@ DEFAULT_INPUT_DIR = REPO_ROOT / "models" / "evaluation" / "legacy_pic50_baseline
 DEFAULT_OUTPUT_DIR = REPO_ROOT / "docs" / "research" / "figures"
 DEFAULT_POSITIONING_MATRIX = DEFAULT_OUTPUT_DIR / "platform_positioning_matrix.tsv"
 DEFAULT_LEAKAGE_SAFE_COMPARISON = REPO_ROOT / "models" / "evaluation" / "leakage_safe_regimes" / "ridge_regime_comparison.tsv"
+DEFAULT_MULTI_MODEL_COMPARISON = REPO_ROOT / "models" / "evaluation" / "leakage_safe_regimes" / "multi_model_regime_comparison.tsv"
 
 
 def parse_args() -> argparse.Namespace:
@@ -44,6 +45,12 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=DEFAULT_LEAKAGE_SAFE_COMPARISON,
         help="TSV describing the staged ridge leakage-safe regime comparison.",
+    )
+    parser.add_argument(
+        "--multi-model-comparison",
+        type=Path,
+        default=DEFAULT_MULTI_MODEL_COMPARISON,
+        help="Optional TSV describing a multi-model leakage-safe regime comparison.",
     )
     return parser.parse_args()
 
@@ -447,6 +454,59 @@ def generate_leakage_safe_regime_figure(leakage_safe_path: Path, output_dir: Pat
     plt.close(fig)
 
 
+def generate_multi_model_leakage_safe_figure(multi_model_path: Path, output_dir: Path) -> bool:
+    if not multi_model_path.exists() or multi_model_path.stat().st_size == 0:
+        return False
+    comparison_df = pd.read_csv(multi_model_path, sep="\t")
+    if comparison_df.empty or comparison_df["model_name"].nunique() < 2:
+        return False
+    order = ["pair_random", "cell_line_holdout", "compound_holdout", "double_cold_start"]
+    completed_models = (
+        comparison_df.groupby("model_name")["regime_name"]
+        .nunique()
+        .loc[lambda counts: counts >= len(order)]
+        .index.tolist()
+    )
+    if len(completed_models) < 2:
+        return False
+    sns.set_theme(style="whitegrid", context="talk")
+    label_map = {
+        "pair_random": "Pair-random",
+        "cell_line_holdout": "Cell-line holdout",
+        "compound_holdout": "Compound holdout",
+        "double_cold_start": "Double cold start",
+    }
+    plot_df = comparison_df[comparison_df["model_name"].isin(completed_models)].copy()
+    plot_df["regime_name"] = pd.Categorical(plot_df["regime_name"], categories=order, ordered=True)
+    plot_df = plot_df.sort_values(["regime_name", "model_name"]).copy()
+    plot_df["regime_label"] = plot_df["regime_name"].map(label_map)
+
+    fig, axes = plt.subplots(1, 2, figsize=(18, 7))
+    for ax, metric_column, metric_title in [
+        (axes[0], "mean_mae", "A. MAE by model and regime"),
+        (axes[1], "mean_r_squared", "B. R² by model and regime"),
+    ]:
+        sns.barplot(
+            data=plot_df,
+            x=metric_column,
+            y="regime_label",
+            hue="model_name",
+            ax=ax,
+        )
+        if metric_column == "mean_r_squared":
+            ax.axvline(0, linestyle="--", color="#444444", linewidth=1.3)
+        ax.set_title(metric_title)
+        ax.set_xlabel("MAE" if metric_column == "mean_mae" else "R²")
+        ax.set_ylabel("")
+        ax.legend(title="Model")
+
+    fig.suptitle("Leakage-safe multi-model comparison across completed regime outputs", fontsize=18, y=1.03)
+    fig.tight_layout()
+    save_figure(fig, output_dir, "legacy_benchmark_leakage_safe_multi_model")
+    plt.close(fig)
+    return True
+
+
 def write_figure_note(output_dir: Path, summary: dict) -> None:
     metrics = summary["global_metrics"]
     calibration = summary["calibration"]
@@ -483,6 +543,7 @@ def main() -> None:
     output_dir = args.output_dir.resolve()
     positioning_matrix_path = args.positioning_matrix.resolve()
     leakage_safe_path = args.leakage_safe_comparison.resolve()
+    multi_model_path = args.multi_model_comparison.resolve()
     predictions, tissue_metrics, potency_bins, top_errors, summary, benchmark_summary = load_artifacts(input_dir)
     predictions = add_error_columns(predictions)
     generate_overview_figure(predictions, tissue_metrics, potency_bins, summary, output_dir)
@@ -492,6 +553,7 @@ def main() -> None:
     generate_calibration_detail_figure(predictions, summary, output_dir)
     generate_subgroup_variability_figure(tissue_metrics, input_dir, output_dir)
     generate_leakage_safe_regime_figure(leakage_safe_path, output_dir)
+    multi_model_generated = generate_multi_model_leakage_safe_figure(multi_model_path, output_dir)
     generate_positioning_figure(positioning_matrix_path, output_dir)
     write_figure_note(output_dir, summary)
     print("summary:")
@@ -511,6 +573,9 @@ def main() -> None:
     print(f"generated: {output_dir / 'legacy_benchmark_subgroup_variability.svg'}")
     print(f"generated: {output_dir / 'legacy_benchmark_leakage_safe_regimes.png'}")
     print(f"generated: {output_dir / 'legacy_benchmark_leakage_safe_regimes.svg'}")
+    if multi_model_generated:
+        print(f"generated: {output_dir / 'legacy_benchmark_leakage_safe_multi_model.png'}")
+        print(f"generated: {output_dir / 'legacy_benchmark_leakage_safe_multi_model.svg'}")
     print(f"generated: {output_dir / 'platform_positioning_comparison.png'}")
     print(f"generated: {output_dir / 'platform_positioning_comparison.svg'}")
     print(f"generated: {output_dir / 'benchmark_figure_set_note.md'}")

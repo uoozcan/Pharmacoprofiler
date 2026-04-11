@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This note records the first completed leakage-safe benchmark comparison generated from the staged `ridge` runs. It should be used as the canonical manuscript-support source for the leakage-sensitive generalization story until additional comparator models are run under the same saved split registry.
+This note records the first completed leakage-safe benchmark comparison generated from the staged `ridge` runs. It should be used as the canonical manuscript-support source for the leakage-sensitive generalization story while additional comparator models are being brought online under the same saved split registry.
 
 ## Canonical comparison file
 
@@ -51,9 +51,13 @@ This result addresses the main benchmarking criticism more directly than the ear
 
 - Figure panel: `docs/research/figures/legacy_benchmark_leakage_safe_regimes.(png|svg)`
 - Supplementary table: `docs/research/supplementary/leakage-safe-ridge-regime-table.md`
+- Comparison shell note: `docs/research/supplementary/leakage-safe-model-comparison-shell.md`
+- Aggregated comparison shell:
+  - `models/evaluation/leakage_safe_regimes/multi_model_regime_comparison.tsv`
+  - `models/evaluation/leakage_safe_regimes/multi_model_regime_status.json`
 
 ## Remaining next steps
 
 1. keep the legacy RF comparator marked pending because the attempted `rf_pair_random` run produced no result files
-2. extend the leakage-safe comparison from ridge-only into a multi-model figure and table
-3. rerun an additional comparator only after the current publication package is stable and the compute budget/runtime strategy is chosen
+2. keep the current leakage-safe manuscript evidence ridge-only until the active `ols` comparator run writes completed regime outputs
+3. extend the leakage-safe comparison from ridge-only into a multi-model figure and table only after the second comparator has finished cleanly

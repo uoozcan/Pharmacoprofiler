@@ -242,6 +242,53 @@ def fit_predict_chunked_ridge(
     return np.concatenate(prediction_chunks)
 
 
+def fit_predict_chunked_ols(
+    feature_df: pd.DataFrame,
+    train_index: np.ndarray,
+    test_index: np.ndarray,
+    omics_lookup: dict[str, np.ndarray],
+    fingerprint_lookup: dict[str, np.ndarray],
+    chunk_size: int = 2048,
+) -> np.ndarray:
+    n_features = len(next(iter(omics_lookup.values()))) + len(next(iter(fingerprint_lookup.values())))
+    xtx = np.zeros((n_features, n_features), dtype=np.float64)
+    xty = np.zeros(n_features, dtype=np.float64)
+    sum_x = np.zeros(n_features, dtype=np.float64)
+    sum_y = 0.0
+    train_count = 0
+
+    for chunk_index in iter_index_chunks(train_index, chunk_size):
+        chunk_rows = feature_df.iloc[chunk_index]
+        chunk_x = assemble_feature_chunk(chunk_rows, omics_lookup, fingerprint_lookup).astype(np.float64, copy=False)
+        chunk_y = chunk_rows["pIC50"].to_numpy(dtype=np.float64, copy=False)
+        xtx += chunk_x.T @ chunk_x
+        xty += chunk_x.T @ chunk_y
+        sum_x += chunk_x.sum(axis=0)
+        sum_y += float(chunk_y.sum())
+        train_count += len(chunk_y)
+
+    system_matrix = np.zeros((n_features + 1, n_features + 1), dtype=np.float64)
+    system_matrix[:n_features, :n_features] = xtx
+    system_matrix[:n_features, n_features] = sum_x
+    system_matrix[n_features, :n_features] = sum_x
+    system_matrix[n_features, n_features] = float(train_count)
+    system_rhs = np.zeros(n_features + 1, dtype=np.float64)
+    system_rhs[:n_features] = xty
+    system_rhs[n_features] = sum_y
+    solution = np.linalg.lstsq(system_matrix, system_rhs, rcond=None)[0]
+    coefficients = solution[:n_features]
+    intercept = float(solution[n_features])
+
+    prediction_chunks = []
+    for chunk_index in iter_index_chunks(test_index, chunk_size):
+        chunk_rows = feature_df.iloc[chunk_index]
+        chunk_x = assemble_feature_chunk(chunk_rows, omics_lookup, fingerprint_lookup).astype(np.float64, copy=False)
+        prediction_chunks.append(chunk_x @ coefficients + intercept)
+    if not prediction_chunks:
+        return np.array([], dtype=np.float64)
+    return np.concatenate(prediction_chunks)
+
+
 def fold_masks(df: pd.DataFrame, regime_name: str, fold: int) -> tuple[pd.Series, pd.Series]:
     if regime_name == "pair_random":
         test_mask = df["pair_random_fold"] == fold
@@ -285,6 +332,15 @@ def run_regime(
         for model_name in model_names:
             if model_name == "ridge":
                 predictions = fit_predict_chunked_ridge(
+                    feature_df,
+                    train_index,
+                    test_index,
+                    omics_lookup,
+                    fingerprint_lookup,
+                )
+                train_rows = int(len(train_index))
+            elif model_name == "ols":
+                predictions = fit_predict_chunked_ols(
                     feature_df,
                     train_index,
                     test_index,

@@ -20,6 +20,12 @@ This matrix maps manuscript preprocessing claims to specific legacy notebooks or
 | Predictor input assembly | `CLRB_MODELLING/Prediction_pairs_vector_matrice_preparation_v1.ipynb` | GDSC, CCLE, and NCI-60 3747-feature matrices; cell-line mapping tables; merged compound tables | assembled prediction matrices for downstream inference | loads GDSC/CCLE/NCI-60 vectors in a shared 3747-feature space; maps cell-line IDs to canonical names; attaches RRIDs from Cellosaurus-derived lookups; intersects datasets across shared feature space and compound lists | upstream generation of the 3747-feature matrices is not reconstructed here; notebook shows consumption and cross-platform alignment rather than full omics preprocessing | direct manuscript support |
 | Model training and external testing | `CLRB_MODELLING/GDSC_CCLE_cross_domain_mode_7.py` plus `GDSC_trained_model_predictions_for_all_platforms_v1.ipynb` | `GDSC_drug_response_drugs_w_smiles_988cl_404dr_337K_v4_w_fps.txt`, `CCLE_drug_response_df_for_cross_domain_v3.txt`, GDSC/CCLE 3747-feature matrices | `GDSC_CCLE_cross_domain_mode_7_v3.joblib`, prediction tables, metric text file | sorts by edited cell-line/drug IDs; splits 1024-bit fingerprint strings into columns; merges fingerprints with omics vectors; builds 4771-feature matrices; casts to `float32`; trains RandomForest on GDSC and evaluates on CCLE | script consumes preserved prepared files and does not expose upstream omics normalization/feature-selection details | direct manuscript support |
 
+Additional preserved artifact support:
+
+- the legacy workspace also preserves parallel prepared matrix files for GDSC, CCLE, and NCI-60 with the shared naming pattern `L1000_common_genes_3747_feature_vector_v1_selected_common_3_platform_v2`
+- this strengthens the claim that the predictor uses a cross-platform prepared omics space
+- it still does not recover the upstream generation workflow for those matrices
+
 ## Interpretation Rules
 
 - Use this matrix as the source of truth for manuscript preprocessing claims.

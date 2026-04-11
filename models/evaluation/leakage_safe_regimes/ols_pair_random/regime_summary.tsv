@@ -1,0 +1,2 @@
+regime_name	model_name	folds	mean_mae	mean_rmse	mean_pearson_r	mean_spearman_r	mean_r_squared	total_test_rows
+pair_random	ols	5	0.4055853953054376	0.5428170772337323	0.8817595005881772	0.8564472614964256	0.7774841988943386	337761

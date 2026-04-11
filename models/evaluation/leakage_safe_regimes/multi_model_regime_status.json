@@ -1,0 +1,80 @@
+{
+  "models": {
+    "ridge": {
+      "complete": true,
+      "regimes": {
+        "pair_random": {
+          "expected_path": "/home/umut/projects/pharmacoprofiler/models/evaluation/leakage_safe_regimes/regime_summary.tsv",
+          "present": true
+        },
+        "cell_line_holdout": {
+          "expected_path": "/home/umut/projects/pharmacoprofiler/models/evaluation/leakage_safe_regimes/ridge_cell_line_holdout/regime_summary.tsv",
+          "present": true
+        },
+        "compound_holdout": {
+          "expected_path": "/home/umut/projects/pharmacoprofiler/models/evaluation/leakage_safe_regimes/ridge_compound_holdout/regime_summary.tsv",
+          "present": true
+        },
+        "double_cold_start": {
+          "expected_path": "/home/umut/projects/pharmacoprofiler/models/evaluation/leakage_safe_regimes/ridge_double_cold_start/regime_summary.tsv",
+          "present": true
+        }
+      }
+    },
+    "ols": {
+      "complete": false,
+      "regimes": {
+        "pair_random": {
+          "expected_path": "/home/umut/projects/pharmacoprofiler/models/evaluation/leakage_safe_regimes/ols_pair_random/regime_summary.tsv",
+          "present": true
+        },
+        "cell_line_holdout": {
+          "expected_path": "/home/umut/projects/pharmacoprofiler/models/evaluation/leakage_safe_regimes/ols_cell_line_holdout/regime_summary.tsv",
+          "present": false
+        },
+        "compound_holdout": {
+          "expected_path": "/home/umut/projects/pharmacoprofiler/models/evaluation/leakage_safe_regimes/ols_compound_holdout/regime_summary.tsv",
+          "present": false
+        },
+        "double_cold_start": {
+          "expected_path": "/home/umut/projects/pharmacoprofiler/models/evaluation/leakage_safe_regimes/ols_double_cold_start/regime_summary.tsv",
+          "present": false
+        }
+      }
+    },
+    "legacy_rf": {
+      "complete": false,
+      "regimes": {
+        "pair_random": {
+          "expected_path": "/home/umut/projects/pharmacoprofiler/models/evaluation/leakage_safe_regimes/rf_pair_random/regime_summary.tsv",
+          "present": false
+        },
+        "cell_line_holdout": {
+          "expected_path": "/home/umut/projects/pharmacoprofiler/models/evaluation/leakage_safe_regimes/rf_cell_line_holdout/regime_summary.tsv",
+          "present": false
+        },
+        "compound_holdout": {
+          "expected_path": "/home/umut/projects/pharmacoprofiler/models/evaluation/leakage_safe_regimes/rf_compound_holdout/regime_summary.tsv",
+          "present": false
+        },
+        "double_cold_start": {
+          "expected_path": "/home/umut/projects/pharmacoprofiler/models/evaluation/leakage_safe_regimes/rf_double_cold_start/regime_summary.tsv",
+          "present": false
+        }
+      }
+    }
+  },
+  "completed_models": [
+    "ridge"
+  ],
+  "pending_models": [
+    "ols",
+    "legacy_rf"
+  ],
+  "regime_order": [
+    "pair_random",
+    "cell_line_holdout",
+    "compound_holdout",
+    "double_cold_start"
+  ]
+}

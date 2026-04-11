@@ -60,7 +60,7 @@ The verified cross-domain training script then consumes prepared GDSC and CCLE r
 
 ## Omics preprocessing boundary
 
-The current evidence is sufficient to state that the predictor consumes preserved 3747-feature L1000-based matrices that were already aligned across platforms in a shared feature space. It is not yet sufficient to describe the full upstream omics normalization, feature selection, or imputation workflow in detail.
+The current evidence is sufficient to state that the predictor consumes preserved 3747-feature L1000-based matrices that were already aligned across platforms in a shared feature space. Parallel prepared artifacts are preserved for GDSC, CCLE, and NCI-60, which strengthens this cross-platform statement. It is still not sufficient to describe the full upstream omics normalization, feature selection, or imputation workflow in detail. See `../supplementary/omics-feature-provenance.md` for the current verified boundary.
 
 The correct methods framing is therefore:
 
@@ -78,3 +78,5 @@ The correct methods framing is therefore:
 ## Manuscript-safe summary
 
 The notebook evidence supports a methods section in which response preprocessing is described as source-specific, harmonization is described as Cellosaurus-assisted and partially manual, chemical features are described as RDKit-generated 1024-bit ECFP4 fingerprints, and model inputs are described as concatenated omics-plus-fingerprint vectors. The same evidence also requires explicit caveats around NCATS metric labeling, NCI-60 endpoint differences, and the incomplete reconstruction of upstream omics preprocessing.
+
+See `../supplementary/harmonization-pipeline-boundary.md` for the current manuscript-safe boundary between verified notebook-grounded harmonization scope and the still-unpackaged end-to-end harmonization pipeline.

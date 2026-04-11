@@ -295,6 +295,28 @@ Panel A compares MAE and RMSE across the four saved GDSC split regimes. Panel B 
 - Reviewer 2
   - need for stronger comparative interpretation of what the model actually generalizes across
 
+## Planned next figure. Leakage-safe multi-model comparison
+
+Files:
+- `legacy_benchmark_leakage_safe_multi_model.png`
+- `legacy_benchmark_leakage_safe_multi_model.svg`
+
+### Activation rule
+
+This figure should be generated only after `models/evaluation/leakage_safe_regimes/multi_model_regime_comparison.tsv` contains at least two completed models. Until then, Figure 11 remains the only citable leakage-safe regime figure.
+
+### Intended legend
+
+**Planned figure. Leakage-safe multi-model comparison across completed benchmark regimes.**  
+This figure will compare the completed comparator models across the saved pair-random, cell-line-holdout, compound-holdout, and double-cold-start regimes. The panel is intended to show whether the leakage-sensitive pattern observed in the staged ridge sweep persists across a second baseline model family. Until a second model finishes cleanly, this figure should not be used in the manuscript.
+
+### Manuscript mapping
+
+- `canonical-manuscript-draft.md`
+  - future revision point for the benchmark-comparison paragraph after a second comparator is complete
+- `leakage-safe-model-comparison-shell.md`
+  - benchmark-progress tracking and activation boundary
+
 ## Recommended manuscript insertion order
 
 For the current revision cycle, the most effective primary figure order is:

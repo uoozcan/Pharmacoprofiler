@@ -10,7 +10,7 @@
   "cell_line_column": "CELL_LINE_NAME_edited",
   "target_column": "pIC50",
   "models": [
-    "legacy_rf",
-    "ridge"
+    "ridge",
+    "ols"
   ]
 }

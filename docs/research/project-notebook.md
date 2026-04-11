@@ -133,6 +133,45 @@ This file is the running project notebook for repository restructuring, benchmar
 2. convert the figure set into final journal-style legends and caption formatting if target-journal guidance is chosen
 3. use the canonical benchmark outputs and figure set to design the next scientific figure round for leakage-safe benchmarking, uncertainty, or mechanism-aware analysis
 
+## 2026-04-11
+
+### Leakage-safe comparator status cleanup
+
+- kept the current manuscript evidence package ridge-only while a second lightweight `ols` comparator run is in progress
+- updated benchmark index and manuscript-status docs so they now state the same comparator boundary:
+  - staged `ridge` sweep is completed and citable
+  - `ols` infrastructure is implemented but not yet evidentiary
+  - legacy RF comparator remains pending because the attempted `rf_pair_random` run produced no result files
+- added `scripts/evaluate/build_leakage_safe_model_comparison.py` so completed model-regime summaries can be merged into one canonical TSV and status JSON as soon as a second model finishes
+- extended the figure generator with an optional multi-model leakage-safe panel that activates only when at least two completed models are present in the aggregated comparison TSV
+- the first `ols` `pair_random` result landed and is effectively identical to the staged `ridge` `pair_random` result, but `ols` remains non-evidentiary until the stricter saved regimes are completed
+
+### Omics provenance boundary tightening
+
+- reviewed preserved legacy matrix artifacts and confirmed that parallel `3747`-feature prepared matrices are present for GDSC, CCLE, and NCI-60
+- added `docs/research/supplementary/omics-feature-provenance.md` to define the current methods-safe boundary for the L1000-based shared feature space
+- updated manuscript/support docs so they now distinguish more clearly between:
+  - verified cross-platform matrix identity and usage
+  - still-unrecovered upstream normalization and feature-selection workflow
+
+### Harmonization boundary tightening
+
+- added `docs/research/supplementary/harmonization-pipeline-boundary.md` to define the manuscript-safe scope of the broader harmonization layer
+- recorded explicitly that the harmonization evidence is notebook-grounded and includes visible manual/dictionary-based curation steps
+- updated the manuscript drafts so they now distinguish more clearly between:
+  - demonstrable multi-dataset harmonization provenance
+  - curated semi-manual identifier integration
+  - the not-yet-packaged end-to-end harmonization pipeline
+
+### Uncertainty boundary tightening
+
+- added `docs/research/supplementary/uncertainty-boundary.md` to define the current manuscript-safe and product-safe boundary for the uncertainty/applicability layer
+- recorded explicitly that the current uncertainty outputs are exploratory reliability analyses rather than calibrated predictive intervals
+- updated manuscript discussion text so it now distinguishes more clearly between:
+  - benchmark-supported uncertainty signal
+  - under-calibrated interval behavior
+  - the still-pending API-level promotion of uncertainty or applicability fields
+
 ### Uncertainty and applicability analysis
 
 - added `scripts/evaluate/analyze_legacy_benchmark_uncertainty.py` for the first uncertainty/applicability analysis pass on the canonical benchmark
@@ -256,3 +295,11 @@ This file is the running project notebook for repository restructuring, benchmar
 - broader multi-dataset harmonization is preserved as notebook provenance, not yet a packaged end-to-end pipeline
 - direct verification of the `pharmacoprofiler.com` frontend/runtime remains incomplete from this environment
 - `pharmacoprofiler_presentation.html` is treated as a local-only export artifact and is now ignored unless intentionally promoted into the repository later
+
+### Next comparator work
+
+- extended `scripts/evaluate/run_legacy_leakage_safe_benchmarks.py` with a chunked `ols` comparator based on the same feature-assembly path as the ridge baseline
+- changed the default leakage-safe runner config to practical comparators (`ridge`, `ols`) rather than the stalled legacy RF path
+- added unit coverage for the new chunked OLS path
+- a trial `sgd_elasticnet` comparator was not promoted because it was numerically unstable on the full leakage-safe table
+- until result files land, the manuscript evidence package remains ridge-only

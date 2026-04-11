@@ -76,6 +76,9 @@ Use these artifacts for the split-policy generalization story:
 - `models/evaluation/leakage_safe_regimes/ridge_regime_comparison.tsv`
 - `docs/research/supplementary/leakage-safe-benchmark-results.md`
 - `docs/research/supplementary/leakage-safe-ridge-regime-table.md`
+- `docs/research/supplementary/leakage-safe-model-comparison-shell.md`
+- `models/evaluation/leakage_safe_regimes/multi_model_regime_comparison.tsv`
+- `models/evaluation/leakage_safe_regimes/multi_model_regime_status.json`
 
 Current staged `ridge` results:
 
@@ -90,6 +93,9 @@ Current message:
 
 - unseen-cell-line generalization is materially stronger than unseen-compound generalization
 - row-random performance should not be presented as a strong unseen-drug result
+- the current canonical leakage-safe evidence remains ridge-only
+- a lightweight `ols` comparator path is implemented, but it is not part of the manuscript evidence package until completed outputs exist
+- the legacy RF comparator remains pending because the attempted `rf_pair_random` run produced no result files
 
 ## Figure entry points
 

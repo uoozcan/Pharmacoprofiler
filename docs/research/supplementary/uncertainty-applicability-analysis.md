@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This note records the first uncertainty-focused extension of the canonical legacy GDSC-to-CCLE benchmark. It is intended as a manuscript-support artifact rather than as a final methodological claim.
+This note records the first uncertainty-focused extension of the canonical legacy GDSC-to-CCLE benchmark. It is intended as a manuscript-support artifact rather than as a final methodological claim. For the current manuscript-safe and product-safe claim boundary, see `uncertainty-boundary.md`.
 
 ## Analysis scope
 

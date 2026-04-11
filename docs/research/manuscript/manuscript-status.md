@@ -25,3 +25,7 @@ Use these as source material, not as final publishable text:
 ## Required Next Step
 
 Continue polishing from the two-draft structure: use `author-working-draft.md` when internal evidence links and figure-placement notes are needed, and use `submission-manuscript-draft.md` for prose-level journal editing. Any new scientific claim should still be added first to the evidence-linked author draft and only then promoted into the submission-facing draft.
+
+## Current Benchmark Boundary
+
+The current manuscript evidence package is complete for the reconstructed CCLE baseline, the uncertainty/applicability and mechanism-aware support analyses, and the staged leakage-safe `ridge` comparison. The next benchmark expansion is a second lightweight comparator under the same saved split registry. That `ols` comparator path is now implemented, but it should not be cited in the manuscript until completed regime outputs have landed. The earlier legacy RF comparator attempt remains non-evidentiary because the attempted `rf_pair_random` run produced no result files.
