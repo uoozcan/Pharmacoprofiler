@@ -22,7 +22,7 @@
       }
     },
     "ols": {
-      "complete": false,
+      "complete": true,
       "regimes": {
         "pair_random": {
           "expected_path": "/home/umut/projects/pharmacoprofiler/models/evaluation/leakage_safe_regimes/ols_pair_random/regime_summary.tsv",
@@ -30,15 +30,15 @@
         },
         "cell_line_holdout": {
           "expected_path": "/home/umut/projects/pharmacoprofiler/models/evaluation/leakage_safe_regimes/ols_cell_line_holdout/regime_summary.tsv",
-          "present": false
+          "present": true
         },
         "compound_holdout": {
           "expected_path": "/home/umut/projects/pharmacoprofiler/models/evaluation/leakage_safe_regimes/ols_compound_holdout/regime_summary.tsv",
-          "present": false
+          "present": true
         },
         "double_cold_start": {
           "expected_path": "/home/umut/projects/pharmacoprofiler/models/evaluation/leakage_safe_regimes/ols_double_cold_start/regime_summary.tsv",
-          "present": false
+          "present": true
         }
       }
     },
@@ -65,10 +65,10 @@
     }
   },
   "completed_models": [
-    "ridge"
+    "ridge",
+    "ols"
   ],
   "pending_models": [
-    "ols",
     "legacy_rf"
   ],
   "regime_order": [

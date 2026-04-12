@@ -9,6 +9,7 @@
 - `legacy_benchmark_calibration.(png|svg)`: detailed calibration view with observed-decile residual structure
 - `legacy_benchmark_subgroup_variability.(png|svg)`: tissue-level error and drug-level bias summary
 - `legacy_benchmark_leakage_safe_regimes.(png|svg)`: staged ridge comparison across pair-random, cell-line-holdout, compound-holdout, and double-cold-start regimes
+- `legacy_benchmark_leakage_safe_multi_model.(png|svg)`: completed ridge-versus-OLS comparison across the four saved leakage-safe regimes
 - `platform_positioning_comparison.(png|svg)`: strategic positioning heatmap derived from the verified competitive analysis
 
 ## Figure-safe messages
@@ -17,10 +18,8 @@
 - Errors are systematically left-shifted, with mean signed error `-0.494` and underprediction in `85.0%` of benchmark rows.
 - Calibration is compressed rather than ideal, with fitted slope `0.740` and intercept `1.007`.
 - Error worsens at higher observed pIC50 values, which should be framed as a key limitation rather than hidden in aggregate metrics.
-- Leakage-sensitive benchmarking shows that the current baseline is much more robust to unseen cell lines than to unseen compounds.
-- The strictest within-dataset ridge result is `double_cold_start`, where performance falls to MAE `0.9363` and `R² = -0.1093`.
+- The completed `ridge` and `ols` leakage-safe sweeps are effectively indistinguishable, which strengthens the split-policy interpretation by showing that it is not tied to one lightweight baseline family.
 
 ## Canonical artifact source
 
 All values and plots in this figure set are generated directly from `models/evaluation/legacy_pic50_baseline/`.
-Figure 11 additionally uses `models/evaluation/leakage_safe_regimes/ridge_regime_comparison.tsv`.

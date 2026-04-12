@@ -1,0 +1,2 @@
+regime_name	model_name	folds	mean_mae	mean_rmse	mean_pearson_r	mean_spearman_r	mean_r_squared	total_test_rows
+cell_line_holdout	ols	5	0.47702164370192524	0.6271615129496083	0.8399522257771659	0.8019375141073499	0.7028496462178084	337761

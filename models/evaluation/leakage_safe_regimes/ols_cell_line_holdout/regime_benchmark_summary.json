@@ -1,0 +1,21 @@
+{
+  "runner_name": "legacy_pic50_leakage_safe_runner",
+  "run_timestamp_utc": "2026-04-12T03:56:25.139365+00:00",
+  "models": [
+    "ols"
+  ],
+  "rows_used": 337761,
+  "regimes": [
+    {
+      "regime_name": "cell_line_holdout",
+      "model_name": "ols",
+      "folds": 5,
+      "mean_mae": 0.47702164370192524,
+      "mean_rmse": 0.6271615129496083,
+      "mean_pearson_r": 0.8399522257771659,
+      "mean_spearman_r": 0.8019375141073499,
+      "mean_r_squared": 0.7028496462178084,
+      "total_test_rows": 337761
+    }
+  ]
+}

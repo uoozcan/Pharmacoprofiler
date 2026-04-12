@@ -172,6 +172,26 @@ This file is the running project notebook for repository restructuring, benchmar
   - under-calibrated interval behavior
   - the still-pending API-level promotion of uncertainty or applicability fields
 
+### Open-issue consolidation
+
+- added `docs/research/supplementary/current-open-issues.md` as the canonical tracker for the remaining unresolved project items
+- tightened `publication-readiness-analysis.md` so it now distinguishes:
+  - unsupported broad multi-model leakage-safe claims
+  - the already completed staged ridge leakage-safe evidence
+- updated `manuscript-status.md` to point future work decisions at the consolidated open-issues tracker rather than leaving them implicit in scattered notes
+
+### Completed OLS leakage-safe sweep
+
+- completed the staged `ols` leakage-safe benchmark across:
+  - `pair_random`
+  - `compound_holdout`
+  - `cell_line_holdout`
+  - `double_cold_start`
+- reran `build_leakage_safe_model_comparison.py`, which now marks both `ridge` and `ols` as complete in the comparison shell
+- regenerated the benchmark figure set, which activated `legacy_benchmark_leakage_safe_multi_model.(png|svg)`
+- added the multi-model supplementary table and promoted the figure mapping from planned to current
+- observed that `ridge` and `ols` are effectively indistinguishable across all four saved regimes
+
 ### Uncertainty and applicability analysis
 
 - added `scripts/evaluate/analyze_legacy_benchmark_uncertainty.py` for the first uncertainty/applicability analysis pass on the canonical benchmark

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This note records the current multi-model comparison shell for the leakage-safe benchmark package. It exists so the project can track completed and pending model-regime outputs without promoting incomplete comparator runs into the manuscript evidence package.
+This note records the current multi-model comparison shell for the leakage-safe benchmark package. It now also marks the point where the shell became a completed two-model comparison rather than a progress-only tracker.
 
 ## Canonical shell artifacts
 
@@ -11,30 +11,34 @@ This note records the current multi-model comparison shell for the leakage-safe 
 
 ## Current state
 
-The aggregated comparison shell currently contains the completed staged `ridge` rows only. The generated status JSON marks `ridge` as complete and both `ols` and `legacy_rf` as pending.
-
-The first `ols` regime output has now landed for `pair_random`, and its summary is effectively identical to the completed ridge `pair_random` result (MAE `0.4056`, RMSE `0.5428`, Pearson `0.8818`, `R² = 0.7775`). That result is useful as a progress check, but it is not enough to promote `ols` into the manuscript evidence package because the stricter leakage-safe regimes are still incomplete.
+The aggregated comparison shell now contains completed staged sweeps for both `ridge` and `ols`. The generated status JSON marks `ridge` and `ols` as complete, with `legacy_rf` still pending.
 
 Current shell summary:
 
 - completed models:
   - `ridge`
-- pending models:
   - `ols`
+- pending models:
   - `legacy_rf`
+
+The completed `ols` sweep is effectively indistinguishable from the completed `ridge` sweep across all four saved regimes. The two-model comparison therefore strengthens the current leakage-sensitive benchmark story rather than changing it.
 
 ## Manuscript-use rule
 
-This shell should be treated as a coordination artifact, not as direct manuscript evidence, until at least one second comparator has finished cleanly across the full saved regime set. Until then:
+This shell can now support manuscript-safe two-model leakage-safe benchmarking across `ridge` and `ols`. The remaining boundary is narrower:
 
-1. cite `ridge_regime_comparison.tsv` and the ridge figure/table for manuscript claims
-2. use `multi_model_regime_status.json` only to document benchmark progress
-3. do not cite `ols` or `legacy_rf` leakage-safe results until completed `regime_summary.tsv` outputs exist
+1. cite `multi_model_regime_comparison.tsv`, Figure 12, and the multi-model supplementary table for ridge-versus-OLS leakage-safe claims
+2. continue to use `multi_model_regime_status.json` to document which comparator families are complete versus pending
+3. keep `legacy_rf` out of the manuscript evidence package until completed `regime_summary.tsv` outputs exist
 
 ## Next step
 
-When the first completed `ols` regime summary lands, rerun:
+Completed next steps:
 
-`python3 scripts/evaluate/build_leakage_safe_model_comparison.py`
+- reran `python3 scripts/evaluate/build_leakage_safe_model_comparison.py`
+- regenerated the benchmark figure set
+- activated the multi-model leakage-safe figure after both `ridge` and `ols` completed all four saved regimes
 
-Then regenerate the benchmark figure set. The optional multi-model leakage-safe figure will activate automatically only after the aggregated comparison TSV contains at least two models with all four saved regimes completed.
+Remaining next step:
+
+- decide whether the `legacy_rf` comparator is worth revisiting or whether the current completed ridge-versus-OLS comparison is sufficient for the manuscript scope

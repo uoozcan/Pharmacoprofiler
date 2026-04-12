@@ -24,11 +24,13 @@ This section contains the canonical manuscript-facing documentation created duri
 - `supplementary/omics-feature-provenance.md`: current verified boundary for the preserved 3747-feature cross-platform omics matrices
 - `supplementary/harmonization-pipeline-boundary.md`: current verified boundary for notebook-grounded harmonization scope versus the still-unpackaged end-to-end pipeline
 - `supplementary/uncertainty-boundary.md`: current verified boundary for exploratory uncertainty/applicability outputs versus calibrated reliability claims
+- `supplementary/current-open-issues.md`: canonical tracker for the remaining scientifically and operationally unresolved items
 - `supplementary/publication-readiness-analysis.md`: manuscript-safe claims, publication risks, and next analysis priorities
 - `supplementary/leakage-safe-benchmark-results.md`: staged ridge split-policy comparison and manuscript-safe interpretation
 - `supplementary/leakage-safe-ridge-regime-table.md`: manuscript-ready supplementary table for the leakage-safe ridge sweep
 - `supplementary/leakage-safe-model-comparison-shell.md`: current multi-model comparison shell and comparator completion status
-- the leakage-safe benchmark evidence is currently ridge-only; a second lightweight `ols` comparator path is implemented but should not be cited until completed outputs exist
+- `supplementary/leakage-safe-multi-model-regime-table.md`: manuscript-ready supplementary table for the completed ridge-versus-OLS leakage-safe comparison
+- the leakage-safe benchmark evidence now includes a completed ridge-versus-OLS two-model comparison; the remaining pending comparator question is whether the heavier legacy RF path is worth revisiting
 - `supplementary/service-analysis-baseline.md`: real-asset service validation summary
 - `supplementary/huggingface-space-parity.md`: live Hugging Face review findings, repo-vs-Space mismatches, and sync targets
 - `legacy/`: verified scope analysis, model inventory, and innovation report

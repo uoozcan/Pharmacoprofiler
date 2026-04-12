@@ -53,7 +53,7 @@ This verifies that the expected legacy runtime artifacts still match the documen
 - the current legacy Random Forest baseline remains a dataset-transfer benchmark on a reconstructed CCLE overlap set
 - bootstrap confidence intervals, calibration diagnostics, subgroup summaries, and figure assets are now generated in the current repository
 - leakage-safe split regimes are now defined and a staged ridge comparator sweep has completed across the saved regimes
-- a full multi-model leakage-safe benchmark is still pending; the legacy RF comparator attempt did not produce result files and is not part of the current evidence package
+- a completed two-model leakage-safe benchmark now exists for `ridge` versus `ols`; the legacy RF comparator attempt still did not produce result files and is not part of the current evidence package
 - the original prepared CCLE cross-domain response file is absent from the preserved legacy workspace and must currently be reconstructed from raw CCLE response records plus GDSC fingerprint mappings
 
 ## Current packaged benchmark workflow
@@ -78,7 +78,7 @@ The first packaged version preserves the current legacy baseline while adding:
 - a machine-readable benchmark summary
 - reconstructed CCLE benchmark input provenance when the original prepared file is absent
 
-Confidence intervals and subgroup diagnostics are now part of the current benchmark package. Multi-model leakage-safe comparison remains a future benchmark task after the completed staged ridge sweep.
+Confidence intervals and subgroup diagnostics are now part of the current benchmark package. The repository now also contains a completed two-model leakage-safe comparison for `ridge` versus `ols`, while the heavier legacy RF comparator remains pending.
 
 See [benchmark-input-reconstruction.md](benchmark-input-reconstruction.md) for the current overlap counts and reconstructed input summary.
 
@@ -88,8 +88,10 @@ The repository now also contains a deterministic Stage 3 split-design and staged
 - `models/evaluation/benchmark_design/benchmark_split_design_summary.json`
 - `models/evaluation/benchmark_design/benchmark_split_regime_counts.tsv`
 - `models/evaluation/leakage_safe_regimes/ridge_regime_comparison.tsv`
+- `models/evaluation/leakage_safe_regimes/multi_model_regime_comparison.tsv`
 - `docs/research/supplementary/leakage-safe-benchmark-design.md`
 - `docs/research/supplementary/leakage-safe-benchmark-results.md`
+- `docs/research/supplementary/leakage-safe-multi-model-regime-table.md`
 
 These artifacts define saved split regimes for:
 - pair-random comparison

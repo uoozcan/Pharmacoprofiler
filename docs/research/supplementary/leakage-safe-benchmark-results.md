@@ -59,5 +59,5 @@ This result addresses the main benchmarking criticism more directly than the ear
 ## Remaining next steps
 
 1. keep the legacy RF comparator marked pending because the attempted `rf_pair_random` run produced no result files
-2. keep the current leakage-safe manuscript evidence ridge-only until the active `ols` comparator run writes completed regime outputs
-3. extend the leakage-safe comparison from ridge-only into a multi-model figure and table only after the second comparator has finished cleanly
+2. use the completed `ridge` versus `ols` comparison for manuscript-safe two-model leakage-sensitive claims
+3. decide whether revisiting the legacy RF comparator would add enough value beyond the now-completed two-model benchmark

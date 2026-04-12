@@ -77,6 +77,7 @@ Use these artifacts for the split-policy generalization story:
 - `docs/research/supplementary/leakage-safe-benchmark-results.md`
 - `docs/research/supplementary/leakage-safe-ridge-regime-table.md`
 - `docs/research/supplementary/leakage-safe-model-comparison-shell.md`
+- `docs/research/supplementary/leakage-safe-multi-model-regime-table.md`
 - `models/evaluation/leakage_safe_regimes/multi_model_regime_comparison.tsv`
 - `models/evaluation/leakage_safe_regimes/multi_model_regime_status.json`
 
@@ -93,8 +94,8 @@ Current message:
 
 - unseen-cell-line generalization is materially stronger than unseen-compound generalization
 - row-random performance should not be presented as a strong unseen-drug result
-- the current canonical leakage-safe evidence remains ridge-only
-- a lightweight `ols` comparator path is implemented, but it is not part of the manuscript evidence package until completed outputs exist
+- the completed `ridge` and `ols` sweeps are effectively indistinguishable across the four saved regimes
+- the current canonical leakage-safe evidence now supports a completed two-model comparison
 - the legacy RF comparator remains pending because the attempted `rf_pair_random` run produced no result files
 
 ## Figure entry points
@@ -111,7 +112,8 @@ Primary current figure set:
 2. Figure 5: calibration detail
 3. Figure 6: subgroup variability
 4. Figure 11: leakage-safe regime comparison
-5. Figure 7: competitive positioning comparison
+5. Figure 12: leakage-safe multi-model comparison
+6. Figure 7: competitive positioning comparison
 
 ## Recommended manuscript-use rule
 

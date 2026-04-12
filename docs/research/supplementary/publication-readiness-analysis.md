@@ -21,7 +21,7 @@ The following should remain explicitly out of scope for final claims:
 
 - state-of-the-art predictive performance claims
 - confidence in individual predictions without uncertainty estimation
-- leakage-safe generalization claims across compounds, cell lines, and datasets
+- broad multi-model leakage-safe generalization claims across compounds, cell lines, and datasets beyond the currently completed staged ridge evidence
 - strong biological-mechanistic interpretation from the current model alone
 - verified implementation claims about the live `pharmacoprofiler.com` stack
 
@@ -87,9 +87,9 @@ These figures would strengthen the Results and Limitations sections without requ
 
 1. Add uncertainty or applicability-domain scoring to prediction outputs.
 2. Add a calibration comparison table before and after post-hoc correction.
-3. Add simple baseline comparators such as ridge or elastic net before introducing deep models.
+3. Extend the completed ridge-versus-OLS leakage-safe benchmark only if a heavier third comparator would materially change the methods story.
 4. Extend the current reporting-layer tissue normalization into a broader cross-resource ontology only after source review.
-5. Add leakage-safe split regimes for compound holdout, cell-line holdout, and source-transfer evaluation.
+5. Promote the completed multi-model leakage-safe figure and table into the manuscript results flow and then decide whether the legacy RF comparator is worth revisiting.
 
 ## Bottom line
 

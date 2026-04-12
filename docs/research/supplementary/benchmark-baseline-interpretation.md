@@ -79,8 +79,8 @@ The baseline remains limited in important ways:
 
 - the CCLE evaluation input is reconstructed from preserved raw files, not recovered byte-for-byte from the missing legacy prepared file
 - the deployed legacy Random Forest baseline is still a dataset-transfer benchmark rather than a full leakage-safe model-family comparison
-- the repository now includes bootstrap confidence intervals, calibration summaries, subgroup diagnostics, and a staged ridge leakage-safe sweep
-- a completed multi-model leakage-safe comparison remains pending; the attempted legacy RF comparator did not produce result files and is not included in the current manuscript evidence package
+- the repository now includes bootstrap confidence intervals, calibration summaries, subgroup diagnostics, a staged ridge leakage-safe sweep, and a completed `ridge` versus `ols` leakage-safe comparison
+- the attempted legacy RF comparator still did not produce result files and is not included in the current manuscript evidence package
 
 ## Compatibility warning
 
