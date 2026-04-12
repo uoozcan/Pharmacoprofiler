@@ -21,19 +21,19 @@ These areas are no longer open blockers for the current platform-and-baseline ma
 
 ## Still open
 
-### 1. Whether to pursue a third leakage-safe comparator
+### 1. Whether to pursue a third leakage-safe comparator in a later methods-focused phase
 
 Current state:
 
 - staged `ridge` leakage-safe sweep is complete and citable
 - staged `ols` leakage-safe sweep is complete and citable
 - the completed `ridge` and `ols` sweeps are effectively indistinguishable across all four saved regimes
-- legacy RF comparator remains unresolved because the attempted `rf_pair_random` run produced no result files
+- the attempted legacy RF `pair_random` run produced no result files and is now treated as deferred rather than as an active manuscript blocker
 
 Why it still matters:
 
 - the manuscript can now make a completed two-model leakage-sensitive benchmarking claim from the `ridge` versus `ols` comparison
-- the remaining question is whether revisiting the heavier legacy RF comparator would add enough value to justify the extra compute cost
+- the remaining question is only whether a heavier third comparator would add enough information to justify later compute cost beyond the already completed two-model evidence package
 
 ### 2. Calibrated uncertainty and applicability
 
@@ -89,5 +89,5 @@ Why it still matters:
 ## Recommended order
 
 1. decide whether calibrated uncertainty is the next scientific work item or whether the completed manuscript package should be pushed first
-2. decide whether the legacy RF comparator is worth revisiting beyond the completed `ridge` versus `ols` benchmark
+2. keep the legacy RF comparator deferred unless a later methods-focused revision needs a heavier third baseline
 3. treat harmonization repackaging and fuller omics provenance recovery as medium-term follow-up work

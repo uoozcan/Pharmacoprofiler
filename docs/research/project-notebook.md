@@ -141,7 +141,7 @@ This file is the running project notebook for repository restructuring, benchmar
 - updated benchmark index and manuscript-status docs so they now state the same comparator boundary:
   - staged `ridge` sweep is completed and citable
   - `ols` infrastructure is implemented but not yet evidentiary
-  - legacy RF comparator remains pending because the attempted `rf_pair_random` run produced no result files
+  - legacy RF comparator had produced no result files at that stage and was later deferred from the manuscript-critical path
 - added `scripts/evaluate/build_leakage_safe_model_comparison.py` so completed model-regime summaries can be merged into one canonical TSV and status JSON as soon as a second model finishes
 - extended the figure generator with an optional multi-model leakage-safe panel that activates only when at least two completed models are present in the aggregated comparison TSV
 - the first `ols` `pair_random` result landed and is effectively identical to the staged `ridge` `pair_random` result, but `ols` remains non-evidentiary until the stricter saved regimes are completed
@@ -191,6 +191,7 @@ This file is the running project notebook for repository restructuring, benchmar
 - regenerated the benchmark figure set, which activated `legacy_benchmark_leakage_safe_multi_model.(png|svg)`
 - added the multi-model supplementary table and promoted the figure mapping from planned to current
 - observed that `ridge` and `ols` are effectively indistinguishable across all four saved regimes
+- treated the earlier legacy RF comparator attempt as deferred after the `rf_pair_random` run produced no result files, so the current manuscript boundary now rests on the completed two-model `ridge` versus `ols` evidence package rather than on pending heavier-compute reruns
 
 ### Uncertainty and applicability analysis
 

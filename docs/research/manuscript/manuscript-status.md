@@ -28,7 +28,7 @@ Continue polishing from the two-draft structure: use `author-working-draft.md` w
 
 ## Current Benchmark Boundary
 
-The current manuscript evidence package is complete for the reconstructed CCLE baseline, the uncertainty/applicability and mechanism-aware support analyses, the staged leakage-safe `ridge` comparison, and the completed two-model `ridge` versus `ols` leakage-safe comparison. The earlier legacy RF comparator attempt remains non-evidentiary because the attempted `rf_pair_random` run produced no result files.
+The current manuscript evidence package is complete for the reconstructed CCLE baseline, the uncertainty/applicability and mechanism-aware support analyses, the staged leakage-safe `ridge` comparison, and the completed two-model `ridge` versus `ols` leakage-safe comparison. The earlier legacy RF comparator attempt remains non-evidentiary because the attempted `rf_pair_random` run produced no result files, and it is now treated as deferred rather than as an active manuscript requirement.
 
 ## Current Open-Issue Tracker
 
@@ -36,5 +36,5 @@ Use `../supplementary/current-open-issues.md` as the canonical tracker for unres
 
 - keep uncertainty/applicability as exploratory reliability analysis until calibration improves
 - keep the broader harmonization layer framed as preserved provenance rather than a fully packaged end-to-end rebuild pipeline
-- decide whether the legacy RF comparator is worth revisiting beyond the completed `ridge` versus `ols` benchmark
+- keep the legacy RF comparator deferred unless a later methods-focused revision requires a heavier third baseline
 - keep `pharmacoprofiler.com` implementation claims conservative until the external frontend stack is separately verified
