@@ -22,6 +22,7 @@ Use `archive/legacy-manuscript-materials/` for exploratory, duplicated, or non-c
 - `supplementary-benchmark-captions.md`: compact manuscript-ready captions for supplementary benchmark figures, including Figures 2, 3, 4, and 10
 - `uncertainty_figure_set_note.md`: manuscript-safe messages linked to the uncertainty and applicability figures
 - `supplementary-uncertainty-captions.md`: compact manuscript-ready captions for Figures 8, 9, and Supplementary Figure S1
+- `supplementary-leakage-safe-captions.md`: compact manuscript-ready captions for Figures 11, 12, and the leakage-safe regime tables
 - `mechanism_figure_set_note.md`: manuscript-safe messages linked to the mechanism-aware figure
 - `figure_legends_and_mapping.md`: manuscript-ready legends and mapping from each figure to manuscript targets and reviewer concerns
 - `platform_positioning_matrix.tsv`: tracked source matrix for the strategic positioning figure
