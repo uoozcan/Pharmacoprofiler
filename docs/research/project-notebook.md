@@ -219,6 +219,17 @@ This file is the running project notebook for repository restructuring, benchmar
 - nearest-train cell-line cosine similarity is directionally informative but weaker:
   - Pearson correlation with cell-line MAE `-0.0916`
 
+### Uncertainty calibration follow-up
+
+- extended the uncertainty analysis to emit `interval_calibration_metrics.tsv` across nominal tree-quantile coverage levels from `0.50` to `0.95`
+- added `docs/research/figures/legacy_benchmark_uncertainty_calibration.(png|svg)` as a supplementary calibration-focused panel
+- confirmed that interval under-coverage is systematic rather than isolated to the nominal 90% interval
+- recorded the current descriptive 90% calibration values:
+  - empirical coverage `0.7371`
+  - coverage gap `-0.1629`
+  - post hoc width inflation factor `1.5677`
+- kept the new inflation factor explicitly descriptive and benchmark-specific, not as a deployment-ready calibration method
+
 ### Mechanism-aware analysis
 
 - added `scripts/evaluate/analyze_legacy_benchmark_mechanisms.py` to annotate the benchmark-overlap drugs with verified legacy compound-target metadata

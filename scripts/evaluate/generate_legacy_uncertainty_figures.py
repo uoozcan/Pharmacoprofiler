@@ -175,6 +175,58 @@ def generate_applicability_figure(
     plt.close(fig)
 
 
+def generate_uncertainty_calibration_figure(
+    calibration_metrics: pd.DataFrame,
+    summary: dict,
+    output_dir: Path,
+) -> None:
+    sns.set_theme(style="whitegrid", context="talk")
+    fig, axes = plt.subplots(1, 2, figsize=(16, 7))
+
+    calibration_df = calibration_metrics.copy()
+    sns.lineplot(
+        data=calibration_df,
+        x="nominal_coverage",
+        y="empirical_coverage",
+        marker="o",
+        linewidth=2.5,
+        color="#1F78B4",
+        ax=axes[0],
+    )
+    axes[0].plot([0.5, 0.96], [0.5, 0.96], linestyle="--", color="#444444", linewidth=1.5)
+    axes[0].set_title("A. Tree-quantile intervals under-cover across nominal levels")
+    axes[0].set_xlabel("Nominal central interval coverage")
+    axes[0].set_ylabel("Empirical benchmark coverage")
+    axes[0].set_xlim(0.48, 0.97)
+    axes[0].set_ylim(0.45, 1.0)
+
+    sns.barplot(data=calibration_df, x="nominal_coverage", y="coverage_gap", color="#B2182B", ax=axes[1])
+    axes[1].axhline(0.0, linestyle="--", color="#444444", linewidth=1.5)
+    axes[1].set_title("B. Coverage gaps remain negative at all evaluated levels")
+    axes[1].set_xlabel("Nominal central interval coverage")
+    axes[1].set_ylabel("Empirical minus nominal coverage")
+    posthoc = summary["posthoc_interval_calibration_90"]
+    axes[1].text(
+        0.03,
+        0.97,
+        (
+            f"90% gap = {summary['global']['tree_interval_90_coverage_gap']:.3f}\n"
+            f"Post hoc inflation = {posthoc['inflation_factor']:.3f}\n"
+            f"Post hoc coverage = {posthoc['posthoc_empirical_coverage']:.3f}"
+        ),
+        transform=axes[1].transAxes,
+        va="top",
+        ha="left",
+        fontsize=11,
+        bbox={"boxstyle": "round,pad=0.35", "facecolor": "white", "alpha": 0.9, "edgecolor": "#cccccc"},
+    )
+
+    fig.suptitle("Interval calibration behavior of the legacy Random Forest baseline", fontsize=18, y=1.03)
+    fig.tight_layout()
+    save_figure(fig, output_dir, "legacy_benchmark_uncertainty_calibration")
+    plt.close(fig)
+
+
 def write_note(output_dir: Path, summary: dict) -> None:
     note = f"""# Uncertainty and Applicability Figure Set
 
@@ -182,12 +234,15 @@ def write_note(output_dir: Path, summary: dict) -> None:
 
 - `legacy_benchmark_uncertainty.(png|svg)`: relationship between ensemble spread, error, and empirical interval behavior
 - `legacy_benchmark_applicability.(png|svg)`: relationship between nearest-train cell-line similarity, benchmark error, and uncertainty
+- `legacy_benchmark_uncertainty_calibration.(png|svg)`: nominal-versus-empirical interval coverage and post hoc width inflation summary
 
 ## Figure-safe messages
 
 - The preserved Random Forest baseline already exposes a usable uncertainty proxy through per-tree prediction spread.
 - Higher ensemble spread is associated with larger absolute benchmark error, with Pearson `r = {summary['global']['uncertainty_vs_absolute_error_pearson']:.3f}`.
 - The nominal 90% tree interval should be presented as an internal uncertainty heuristic rather than as a fully calibrated predictive interval.
+- Tree-quantile intervals under-cover across nominal coverage levels, with a 90% coverage gap of `{summary['global']['tree_interval_90_coverage_gap']:.3f}`.
+- The post hoc 90% width inflation factor is `{summary['posthoc_interval_calibration_90']['inflation_factor']:.3f}`, which is descriptive of current miscalibration and not a deployment-ready calibration method.
 - A simple applicability proxy based on nearest GDSC cell-line cosine similarity shows that CCLE cell lines farther from the GDSC training manifold tend to have worse benchmark error, with Pearson `r = {summary['global']['cell_line_similarity_vs_mae_pearson']:.3f}`.
 
 ## Canonical artifact source
@@ -205,10 +260,12 @@ def main() -> None:
     uncertainty_bins = pd.read_csv(input_dir / "uncertainty_bin_metrics.tsv", sep="\t")
     applicability_bins = pd.read_csv(input_dir / "applicability_bin_metrics.tsv", sep="\t")
     cell_line_metrics = pd.read_csv(input_dir / "cell_line_applicability_metrics.tsv", sep="\t")
+    calibration_metrics = pd.read_csv(input_dir / "interval_calibration_metrics.tsv", sep="\t")
     summary = json.loads((input_dir / "uncertainty_applicability_summary.json").read_text(encoding="utf-8"))
 
     generate_uncertainty_figure(predictions, uncertainty_bins, summary, output_dir)
     generate_applicability_figure(cell_line_metrics, applicability_bins, summary, output_dir)
+    generate_uncertainty_calibration_figure(calibration_metrics, summary, output_dir)
     write_note(output_dir, summary)
 
     print("summary:")
@@ -218,6 +275,8 @@ def main() -> None:
     print(f"generated: {output_dir / 'legacy_benchmark_uncertainty.svg'}")
     print(f"generated: {output_dir / 'legacy_benchmark_applicability.png'}")
     print(f"generated: {output_dir / 'legacy_benchmark_applicability.svg'}")
+    print(f"generated: {output_dir / 'legacy_benchmark_uncertainty_calibration.png'}")
+    print(f"generated: {output_dir / 'legacy_benchmark_uncertainty_calibration.svg'}")
     print(f"generated: {output_dir / 'uncertainty_figure_set_note.md'}")
 
 

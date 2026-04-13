@@ -100,6 +100,10 @@ def compute_tree_interval_predictions(model: Any, feature_matrix: np.ndarray) ->
     )
 
 
+def collect_tree_predictions(model: Any, feature_matrix: np.ndarray) -> np.ndarray:
+    return np.vstack([estimator.predict(feature_matrix).astype(np.float32) for estimator in model.estimators_])
+
+
 def nearest_train_cosine_similarity(
     gdsc_omics_df: pd.DataFrame,
     ccle_omics_df: pd.DataFrame,
@@ -202,6 +206,48 @@ def summarize_cell_line_applicability(df: pd.DataFrame) -> pd.DataFrame:
     return summary
 
 
+def summarize_interval_calibration(
+    estimator_predictions: np.ndarray,
+    true_values: np.ndarray,
+) -> pd.DataFrame:
+    rows: list[dict[str, float]] = []
+    for nominal_level in [0.50, 0.60, 0.70, 0.80, 0.90, 0.95]:
+        alpha = (1.0 - nominal_level) / 2.0
+        lower = np.quantile(estimator_predictions, alpha, axis=0)
+        upper = np.quantile(estimator_predictions, 1.0 - alpha, axis=0)
+        coverage = ((true_values >= lower) & (true_values <= upper)).mean()
+        mean_width = float(np.mean(upper - lower))
+        rows.append(
+            {
+                "nominal_coverage": float(nominal_level),
+                "empirical_coverage": float(coverage),
+                "coverage_gap": float(coverage - nominal_level),
+                "mean_interval_width": mean_width,
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def posthoc_interval_inflation(
+    true_values: np.ndarray,
+    lower_values: np.ndarray,
+    upper_values: np.ndarray,
+    target_coverage: float = 0.90,
+) -> dict[str, float]:
+    centers = (lower_values + upper_values) / 2.0
+    half_width = np.maximum((upper_values - lower_values) / 2.0, 1e-6)
+    scaled_residual = np.abs(true_values - centers) / half_width
+    inflation_factor = float(np.quantile(scaled_residual, target_coverage))
+    adjusted_lower = centers - inflation_factor * half_width
+    adjusted_upper = centers + inflation_factor * half_width
+    adjusted_coverage = float(((true_values >= adjusted_lower) & (true_values <= adjusted_upper)).mean())
+    return {
+        "target_coverage": float(target_coverage),
+        "inflation_factor": inflation_factor,
+        "posthoc_empirical_coverage": adjusted_coverage,
+    }
+
+
 def correlation_or_none(x_values: pd.Series, y_values: pd.Series) -> float | None:
     if pearsonr is None:
         return None
@@ -215,9 +261,14 @@ def build_summary(
     uncertainty_bins: pd.DataFrame,
     applicability_bins: pd.DataFrame,
     cell_line_summary: pd.DataFrame,
+    interval_calibration: pd.DataFrame,
+    posthoc_calibration: dict[str, float],
     response_metadata: dict[str, Any],
     artifact_paths: dict[str, Path],
 ) -> dict[str, Any]:
+    calibration_90 = interval_calibration.loc[
+        interval_calibration["nominal_coverage"] == 0.90
+    ].to_dict(orient="records")[0]
     return {
         "analysis_name": "legacy_pic50_uncertainty_and_applicability",
         "run_timestamp_utc": datetime.now(timezone.utc).isoformat(),
@@ -230,6 +281,7 @@ def build_summary(
             "mean_prediction_std": float(uncertainty_df["prediction_std"].mean()),
             "median_prediction_std": float(uncertainty_df["prediction_std"].median()),
             "tree_interval_90_coverage": float(uncertainty_df["within_tree_interval_90"].mean()),
+            "tree_interval_90_coverage_gap": float(calibration_90["coverage_gap"]),
             "uncertainty_vs_absolute_error_pearson": correlation_or_none(
                 uncertainty_df["prediction_std"], uncertainty_df["absolute_error"]
             ),
@@ -237,6 +289,8 @@ def build_summary(
                 cell_line_summary["nearest_train_cosine"], cell_line_summary["mae"]
             ),
         },
+        "interval_calibration_90": calibration_90,
+        "posthoc_interval_calibration_90": posthoc_calibration,
         "highest_uncertainty_bin": uncertainty_bins.sort_values("mean_prediction_std", ascending=False)
         .head(1)
         .to_dict(orient="records")[0],
@@ -252,6 +306,7 @@ def write_outputs(
     uncertainty_bins: pd.DataFrame,
     applicability_bins: pd.DataFrame,
     cell_line_summary: pd.DataFrame,
+    interval_calibration: pd.DataFrame,
     summary: dict[str, Any],
 ) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -259,6 +314,7 @@ def write_outputs(
     uncertainty_bins.to_csv(output_dir / "uncertainty_bin_metrics.tsv", sep="\t", index=False)
     applicability_bins.to_csv(output_dir / "applicability_bin_metrics.tsv", sep="\t", index=False)
     cell_line_summary.to_csv(output_dir / "cell_line_applicability_metrics.tsv", sep="\t", index=False)
+    interval_calibration.to_csv(output_dir / "interval_calibration_metrics.tsv", sep="\t", index=False)
     (output_dir / "uncertainty_applicability_summary.json").write_text(
         json.dumps(summary, indent=2),
         encoding="utf-8",
@@ -300,7 +356,10 @@ def main() -> None:
     labels = benchmark_df[config["target_column"]].to_numpy(dtype=np.float32)
     model = joblib.load(artifact_paths["trained_model"])
     predictions = model.predict(feature_matrix)
-    prediction_std, lower_90, upper_90 = compute_tree_interval_predictions(model, feature_matrix)
+    estimator_predictions = collect_tree_predictions(model, feature_matrix)
+    prediction_std = estimator_predictions.std(axis=0, ddof=1)
+    lower_90 = np.quantile(estimator_predictions, 0.05, axis=0)
+    upper_90 = np.quantile(estimator_predictions, 0.95, axis=0)
 
     nearest_similarity = nearest_train_cosine_similarity(gdsc_omics_df, ccle_vector_df)
     uncertainty_df = merged_ccle_df[["CELL_LINE_NAME", "DRUG_NAME"]].copy()
@@ -321,21 +380,34 @@ def main() -> None:
     uncertainty_bins = summarize_uncertainty_bins(uncertainty_df)
     applicability_bins = summarize_applicability_bins(uncertainty_df)
     cell_line_summary = summarize_cell_line_applicability(uncertainty_df)
+    interval_calibration = summarize_interval_calibration(estimator_predictions, labels)
+    posthoc_calibration = posthoc_interval_inflation(labels, lower_90, upper_90)
     summary = build_summary(
         uncertainty_df,
         uncertainty_bins,
         applicability_bins,
         cell_line_summary,
+        interval_calibration,
+        posthoc_calibration,
         response_metadata,
         artifact_paths,
     )
-    write_outputs(output_dir, uncertainty_df, uncertainty_bins, applicability_bins, cell_line_summary, summary)
+    write_outputs(
+        output_dir,
+        uncertainty_df,
+        uncertainty_bins,
+        applicability_bins,
+        cell_line_summary,
+        interval_calibration,
+        summary,
+    )
 
     print("summary:")
     print(f"output_dir: {output_dir}")
     print(f"rows: {len(uncertainty_df)}")
     print(f"mean_prediction_std: {summary['global']['mean_prediction_std']:.4f}")
     print(f"tree_interval_90_coverage: {summary['global']['tree_interval_90_coverage']:.4f}")
+    print(f"tree_interval_90_coverage_gap: {summary['global']['tree_interval_90_coverage_gap']:.4f}")
     print(
         "uncertainty_vs_absolute_error_pearson: "
         f"{summary['global']['uncertainty_vs_absolute_error_pearson']}"

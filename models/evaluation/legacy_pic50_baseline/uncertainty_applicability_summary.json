@@ -1,6 +1,6 @@
 {
   "analysis_name": "legacy_pic50_uncertainty_and_applicability",
-  "run_timestamp_utc": "2026-04-03T11:03:34.327172+00:00",
+  "run_timestamp_utc": "2026-04-12T23:41:03.776784+00:00",
   "ccle_response_source": {
     "source_mode": "reconstructed_from_raw",
     "source_path": "/home/umut/projects/pharmacoprofiler_legacy/Cellminer/CCLE/CCLE_actual_drug_response_v1.txt",
@@ -22,8 +22,20 @@
     "mean_prediction_std": 0.6031883955001831,
     "median_prediction_std": 0.5792655944824219,
     "tree_interval_90_coverage": 0.7371411024105635,
+    "tree_interval_90_coverage_gap": -0.1628588975894365,
     "uncertainty_vs_absolute_error_pearson": 0.22733468744530813,
-    "cell_line_similarity_vs_mae_pearson": -0.091580725000626
+    "cell_line_similarity_vs_mae_pearson": -0.09158072500062595
+  },
+  "interval_calibration_90": {
+    "nominal_coverage": 0.9,
+    "empirical_coverage": 0.7371411024105635,
+    "coverage_gap": -0.1628588975894365,
+    "mean_interval_width": 1.8878231835991268
+  },
+  "posthoc_interval_calibration_90": {
+    "target_coverage": 0.9,
+    "inflation_factor": 1.56768609883689,
+    "posthoc_empirical_coverage": 0.8998925226470137
   },
   "highest_uncertainty_bin": {
     "uncertainty_bin": "Q5 highest",
@@ -38,7 +50,7 @@
     "applicability_bin": "Q1 lowest",
     "n": 1316,
     "mean_nearest_train_cosine": 0.92961680082927,
-    "mae": 0.6766294921631617,
+    "mae": 0.6766294921631616,
     "mean_prediction_std": 0.6156180500984192,
     "mean_signed_error": -0.5233060663740493
   }

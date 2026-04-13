@@ -15,6 +15,7 @@ Use `archive/legacy-manuscript-materials/` for exploratory, duplicated, or non-c
 - `legacy_benchmark_leakage_safe_regimes.(png|svg)`: staged ridge comparison across leakage-sensitive split regimes
 - `legacy_benchmark_uncertainty.(png|svg)`: ensemble-spread uncertainty and interval-behavior summary
 - `legacy_benchmark_applicability.(png|svg)`: cell-line similarity applicability proxy versus benchmark error
+- `legacy_benchmark_uncertainty_calibration.(png|svg)`: nominal-versus-empirical interval coverage and descriptive post hoc inflation summary
 - `legacy_benchmark_mechanism_overview.(png|svg)`: mechanism-class and target-breadth context for the benchmark-overlap drugs
 - `platform_positioning_comparison.(png|svg)`: competitive positioning heatmap derived from verified repo analysis
 - `benchmark_figure_set_note.md`: manuscript-safe messages linked to the generated benchmark figures

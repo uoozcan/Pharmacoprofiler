@@ -29,12 +29,14 @@ Generated outputs are stored under `models/evaluation/legacy_pic50_baseline/`:
 - `uncertainty_bin_metrics.tsv`
 - `applicability_bin_metrics.tsv`
 - `cell_line_applicability_metrics.tsv`
+- `interval_calibration_metrics.tsv`
 - `uncertainty_applicability_summary.json`
 
 Generated figure assets are stored under `docs/research/figures/`:
 
 - `legacy_benchmark_uncertainty.(png|svg)`
 - `legacy_benchmark_applicability.(png|svg)`
+- `legacy_benchmark_uncertainty_calibration.(png|svg)`
 - `uncertainty_figure_set_note.md`
 
 ## Current findings
@@ -62,6 +64,10 @@ The current nominal 90% tree interval covers only `73.7%` of benchmark rows.
 
 This means the raw tree-quantile interval is not yet suitable for strong probabilistic claims. In manuscript language, it should be described as an internal uncertainty heuristic that reveals miscalibration rather than as a calibrated predictive interval.
 
+The broader interval-calibration curve shows that under-coverage is not confined to the 90% interval. Across nominal central coverage levels from `0.50` to `0.95`, empirical coverage remains systematically lower than nominal coverage, with gaps ranging from `-0.2293` at the 50% level to `-0.1358` at the 95% level. The mean nominal 90% interval width is `1.8878`.
+
+A descriptive post hoc width-inflation calculation shows that the current 90% tree interval would need a global inflation factor of `1.5677` to achieve about `0.8999` empirical coverage on the same benchmark set. This is useful as a miscalibration diagnostic, but it should not be presented as a deployment-ready calibration method because it is estimated on the evaluated benchmark itself.
+
 ### Applicability proxy
 
 The current applicability proxy is weaker than the uncertainty signal but still directionally informative:
@@ -81,11 +87,13 @@ The effect is modest, so this proxy should currently be framed as a first-pass d
 
 `A first-pass uncertainty analysis showed that per-sample ensemble spread from the preserved Random Forest was positively associated with benchmark error, whereas nominal tree-based 90% intervals under-covered the reconstructed CCLE benchmark set, indicating that uncertainty estimates should be calibrated before being used for stronger predictive claims.`
 
+`A calibration-focused follow-up showed that tree-quantile intervals under-covered the benchmark set across all evaluated nominal coverage levels, and that even the nominal 90% interval would require substantial post hoc width inflation to recover target coverage on the same benchmark set.`
+
 `A simple applicability proxy based on nearest-train cell-line cosine similarity showed only a modest relationship with benchmark error, suggesting that domain-shift effects are present but not yet fully captured by this initial similarity-based analysis.`
 
 ## Next recommended uncertainty work
 
-1. calibrate or post-process the tree-based intervals before exposing them as public prediction intervals
+1. calibrate or post-process the tree-based intervals under a proper held-out protocol before exposing them as public prediction intervals
 2. compare uncertainty performance across compounds, tissues, and high-response subsets
 3. test stronger applicability-domain methods, such as conformal prediction or local-density-based scoring
 4. decide whether uncertainty fields should be added to the public API as additive metadata only after calibration is improved

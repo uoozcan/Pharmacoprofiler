@@ -32,13 +32,16 @@ The current evidence supports the following statements:
 1. the preserved Random Forest exposes an internal ensemble-spread signal that is positively associated with benchmark error
 2. higher uncertainty bins show worse benchmark performance on average
 3. the nominal tree-based 90% interval is under-calibrated on the reconstructed CCLE benchmark
-4. a simple nearest-train cell-line similarity proxy is directionally informative but weaker than the uncertainty signal
+4. the broader tree-quantile calibration curve also shows systematic under-coverage across evaluated nominal interval levels
+5. a simple nearest-train cell-line similarity proxy is directionally informative but weaker than the uncertainty signal
 
 Current benchmark-backed values:
 
 - mean prediction standard deviation: `0.6032`
 - uncertainty versus absolute error Pearson correlation: `0.2273`
 - nominal 90% interval coverage: `0.7371`
+- nominal 90% interval coverage gap: `-0.1629`
+- post hoc 90% interval inflation factor on the same benchmark: `1.5677`
 - nearest-train similarity versus cell-line MAE Pearson correlation: `-0.0916`
 
 ## What is not yet supported
