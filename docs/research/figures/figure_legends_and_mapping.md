@@ -241,6 +241,36 @@ Panel A relates each CCLE cell line’s mean absolute benchmark error to its nea
 - Reviewer 2
   - need for biologically contextualized explanation of where the model is less reliable
 
+## Supplementary Figure S1. Interval calibration of the legacy uncertainty layer
+
+Files:
+- `legacy_benchmark_uncertainty_calibration.png`
+- `legacy_benchmark_uncertainty_calibration.svg`
+
+### Legend
+
+**Supplementary Figure S1. Interval calibration behavior of the verified legacy Random Forest baseline.**  
+Panel A compares nominal central tree-quantile coverage to empirical benchmark coverage across interval levels from 50% to 95%, showing systematic under-coverage rather than a problem confined to the nominal 90% interval alone. Panel B summarizes coverage gaps across the same levels and annotates the descriptive post hoc width-inflation factor required to recover nominal 90% coverage on the same benchmark set. Together, the panels support the manuscript-safe interpretation that the current uncertainty layer exposes a real signal but remains under-calibrated and should not yet be promoted as a deployment-ready predictive-interval method.
+
+### Manuscript mapping
+
+- `canonical-manuscript-draft.md`
+  - Discussion paragraph on future uncertainty-aware serving
+- `submission-manuscript-draft.md`
+  - Discussion paragraph on future uncertainty-aware serving
+- `author-working-draft.md`
+  - Discussion paragraph on future uncertainty-aware serving
+- `uncertainty-applicability-analysis.md`
+  - `Interval behavior`
+  - `Manuscript-safe wording`
+
+### Reviewer mapping
+
+- Reviewer 1
+  - need for stronger rigor around predictive reliability and interval validity
+- Reviewer 2
+  - need to distinguish exploratory uncertainty from stronger translational reliability claims
+
 ## Figure 10. Mechanism-aware benchmark annotation
 
 Files:
@@ -338,4 +368,5 @@ Recommended supplemental figure order:
 3. Figure 4: top-error examples
 4. Figure 8: uncertainty behavior
 5. Figure 9: applicability proxy
-6. Figure 10: mechanism-aware benchmark annotation
+6. Supplementary Figure S1: interval calibration of the uncertainty layer
+7. Figure 10: mechanism-aware benchmark annotation
