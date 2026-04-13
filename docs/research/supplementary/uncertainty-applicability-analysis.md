@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This note records the first uncertainty-focused extension of the canonical legacy GDSC-to-CCLE benchmark. It is intended as a manuscript-support artifact rather than as a final methodological claim. For the current manuscript-safe and product-safe claim boundary, see `uncertainty-boundary.md`.
+This note records the uncertainty-focused extension of the canonical legacy GDSC-to-CCLE benchmark. It now includes both the original ensemble-spread diagnostics and a stricter OOB-based split-conformal calibration pass. It is intended as a manuscript-support artifact rather than as a final deployment claim. For the current manuscript-safe and product-safe claim boundary, see `uncertainty-boundary.md`.
 
 ## Analysis scope
 
@@ -26,11 +26,15 @@ These should be framed as internal uncertainty and applicability proxies, not ye
 Generated outputs are stored under `models/evaluation/legacy_pic50_baseline/`:
 
 - `ccle_predictions_with_uncertainty.tsv`
+- `ccle_predictions_with_calibrated_uncertainty.tsv`
 - `uncertainty_bin_metrics.tsv`
 - `applicability_bin_metrics.tsv`
 - `cell_line_applicability_metrics.tsv`
 - `interval_calibration_metrics.tsv`
+- `conformal_interval_calibration_metrics.tsv`
+- `conformal_subgroup_interval_metrics.tsv`
 - `uncertainty_applicability_summary.json`
+- `uncertainty_calibration_summary.json`
 
 Generated figure assets are stored under `docs/research/figures/`:
 
@@ -68,6 +72,20 @@ The broader interval-calibration curve shows that under-coverage is not confined
 
 A descriptive post hoc width-inflation calculation shows that the current 90% tree interval would need a global inflation factor of `1.5677` to achieve about `0.8999` empirical coverage on the same benchmark set. This is useful as a miscalibration diagnostic, but it should not be presented as a deployment-ready calibration method because it is estimated on the evaluated benchmark itself.
 
+### Held-out split-conformal calibration
+
+A stricter calibration pass was then added using a deterministic `10,000`-row GDSC reference partition and out-of-bag estimator membership reconstructed from the stored Random Forest bootstrap states. This produces a benchmark-backed split-conformal layer without calibrating on the evaluated CCLE rows themselves.
+
+Key results from `uncertainty_calibration_summary.json`:
+
+- raw nominal 90% coverage on CCLE: `0.7371`
+- OOB split-conformal nominal 90% coverage on CCLE: `0.4849`
+- raw mean 90% interval width: `1.8878`
+- OOB split-conformal mean 90% interval width: `1.1182`
+- mean out-of-bag estimators per calibration row: `36.747`
+
+This is an important negative result. The held-out calibration workflow is real and reproducible, but it does not transfer adequately from the GDSC-side reference rows to the external CCLE benchmark. In practice, this means the current conformal layer sharpens the methodological story more than it solves the uncertainty problem.
+
 ### Applicability proxy
 
 The current applicability proxy is weaker than the uncertainty signal but still directionally informative:
@@ -85,7 +103,7 @@ The effect is modest, so this proxy should currently be framed as a first-pass d
 
 ## Manuscript-safe wording
 
-`A first-pass uncertainty analysis showed that per-sample ensemble spread from the preserved Random Forest was positively associated with benchmark error, whereas nominal tree-based 90% intervals under-covered the reconstructed CCLE benchmark set, indicating that uncertainty estimates should be calibrated before being used for stronger predictive claims.`
+`A first-pass uncertainty analysis showed that per-sample ensemble spread from the preserved Random Forest was positively associated with benchmark error, whereas nominal tree-based 90% intervals under-covered the reconstructed CCLE benchmark set. A stricter OOB-based split-conformal layer could also be built from a deterministic GDSC reference partition, but it still under-covered the external CCLE benchmark, indicating that cross-domain reliability remains a real limitation even after held-out calibration.`
 
 `A calibration-focused follow-up showed that tree-quantile intervals under-covered the benchmark set across all evaluated nominal coverage levels, and that even the nominal 90% interval would require substantial post hoc width inflation to recover target coverage on the same benchmark set.`
 
@@ -93,7 +111,7 @@ The effect is modest, so this proxy should currently be framed as a first-pass d
 
 ## Next recommended uncertainty work
 
-1. calibrate or post-process the tree-based intervals under a proper held-out protocol before exposing them as public prediction intervals
+1. find a calibration strategy that improves external CCLE coverage, not only formal held-out calibration on GDSC-side rows
 2. compare uncertainty performance across compounds, tissues, and high-response subsets
-3. test stronger applicability-domain methods, such as conformal prediction or local-density-based scoring
+3. strengthen applicability-domain methods beyond nearest-neighbor cosine similarity alone
 4. decide whether uncertainty fields should be added to the public API as additive metadata only after calibration is improved

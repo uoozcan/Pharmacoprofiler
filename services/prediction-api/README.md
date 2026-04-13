@@ -73,3 +73,5 @@ Contract and smoke tests:
 - `python3 services/prediction-api/smoke_test.py`
 
 The API contract tests are fake-predictor based and are intended to validate response behavior without requiring real model assets. The smoke test is the lightweight real-runtime check.
+
+Uncertainty and applicability analyses live in the repository rather than the live API contract. That now includes an OOB-based split-conformal calibration pass, but the external CCLE benchmark remains under-covered, so uncertainty fields should stay documentation-only until transfer improves materially.

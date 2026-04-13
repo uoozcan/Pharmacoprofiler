@@ -50,10 +50,14 @@ Use these artifacts for supplementary reliability framing:
 - `models/evaluation/legacy_pic50_baseline/uncertainty_bin_metrics.tsv`
 - `models/evaluation/legacy_pic50_baseline/applicability_bin_metrics.tsv`
 - `models/evaluation/legacy_pic50_baseline/interval_calibration_metrics.tsv`
+- `models/evaluation/legacy_pic50_baseline/uncertainty_calibration_summary.json`
+- `models/evaluation/legacy_pic50_baseline/conformal_interval_calibration_metrics.tsv`
+- `models/evaluation/legacy_pic50_baseline/conformal_subgroup_interval_metrics.tsv`
 
 Current message:
 
 - uncertainty signal exists but is under-calibrated
+- an OOB-based split-conformal calibration workflow now exists, but it still under-covers the external CCLE benchmark
 - interval under-coverage is visible across nominal coverage levels, not only at the 90% interval
 - first-pass applicability proxy is weaker than the uncertainty signal
 

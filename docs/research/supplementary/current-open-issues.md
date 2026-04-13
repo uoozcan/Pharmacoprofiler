@@ -35,19 +35,22 @@ Why it still matters:
 - the manuscript can now make a completed two-model leakage-sensitive benchmarking claim from the `ridge` versus `ols` comparison
 - the remaining question is only whether a heavier third comparator would add enough information to justify later compute cost beyond the already completed two-model evidence package
 
-### 2. Calibrated uncertainty and applicability
+### 2. External transfer of calibrated uncertainty and applicability
 
 Current state:
 
 - first-pass uncertainty and applicability outputs exist
 - the uncertainty signal is informative
 - the current tree-based intervals are under-calibrated
+- an OOB-based split-conformal calibration workflow now exists
+- that held-out calibration still under-covers the external CCLE benchmark
 - the similarity-based applicability proxy is modest in effect size
 
 Why it still matters:
 
 - the current layer is useful for manuscript limitation framing
 - it is not yet strong enough for public reliability claims or default API outputs
+- held-out GDSC-side calibration does not yet transfer adequately to CCLE
 
 ### 3. End-to-end harmonization packaging
 
@@ -88,6 +91,6 @@ Why it still matters:
 
 ## Recommended order
 
-1. decide whether calibrated uncertainty is the next scientific work item or whether the completed manuscript package should be pushed first
+1. decide whether stronger cross-domain uncertainty transfer is the next scientific work item or whether the completed manuscript package should be pushed first
 2. keep the legacy RF comparator deferred unless a later methods-focused revision needs a heavier third baseline
 3. treat harmonization repackaging and fuller omics provenance recovery as medium-term follow-up work

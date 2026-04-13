@@ -138,6 +138,34 @@ This file is the running project notebook for repository restructuring, benchmar
 ### Leakage-safe comparator status cleanup
 
 - kept the current manuscript evidence package ridge-only while a second lightweight `ols` comparator run is in progress
+
+## 2026-04-13
+
+### Split-conformal uncertainty upgrade
+
+- extended `scripts/evaluate/analyze_legacy_benchmark_uncertainty.py` with additive calibrated outputs:
+  - `ccle_predictions_with_calibrated_uncertainty.tsv`
+  - `conformal_interval_calibration_metrics.tsv`
+  - `conformal_subgroup_interval_metrics.tsv`
+  - `uncertainty_calibration_summary.json`
+- added a deterministic `10,000`-row GDSC calibration reference partition
+- reconstructed out-of-bag estimator membership from the stored Random Forest bootstrap states so calibration scores do not reuse in-sample tree predictions
+- regenerated `docs/research/figures/legacy_benchmark_uncertainty_calibration.(png|svg)` to compare raw tree intervals against the OOB split-conformal layer
+
+### Key result
+
+- the calibration workflow is real and reproducible, but it does not transfer adequately to the external CCLE benchmark
+- raw nominal `90%` coverage on CCLE: `0.7371`
+- OOB split-conformal nominal `90%` coverage on CCLE: `0.4849`
+- raw mean `90%` interval width: `1.8878`
+- OOB split-conformal mean `90%` interval width: `1.1182`
+
+### Manuscript boundary update
+
+- updated uncertainty-facing notes, figure legends, captions, and manuscript drafts so they now distinguish:
+  - raw tree-spread uncertainty
+  - implemented held-out split-conformal calibration
+  - the still-open cross-domain reliability gap
 - updated benchmark index and manuscript-status docs so they now state the same comparator boundary:
   - staged `ridge` sweep is completed and citable
   - `ols` infrastructure is implemented but not yet evidentiary

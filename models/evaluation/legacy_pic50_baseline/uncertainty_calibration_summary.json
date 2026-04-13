@@ -1,0 +1,53 @@
+{
+  "analysis_name": "legacy_pic50_split_conformal_calibration",
+  "run_timestamp_utc": "2026-04-13T10:21:18.413825+00:00",
+  "calibration_reference": {
+    "source": "gdsc_post_training_reference_split",
+    "seed": 17,
+    "requested_rows": 10000,
+    "selected_rows": 10000,
+    "eligible_rows": 337761,
+    "selected_drugs": 404,
+    "selected_cell_lines": 984,
+    "score_method": "oob_tree_std_scaled_absolute_residual",
+    "oob_rows": 10000,
+    "dropped_rows_without_oob_predictions": 0,
+    "mean_oob_estimators_per_row": 36.747,
+    "min_oob_estimators_per_row": 20,
+    "max_oob_estimators_per_row": 56
+  },
+  "target_nominal_coverage": 0.9,
+  "global_90": {
+    "nominal_coverage": 0.9,
+    "raw_empirical_coverage": 0.7371411024105635,
+    "conformal_empirical_coverage": 0.4848764010440657,
+    "raw_coverage_gap": -0.1628588975894365,
+    "conformal_coverage_gap": -0.4151235989559343,
+    "raw_mean_interval_width": 1.8878231835991268,
+    "conformal_mean_interval_width": 1.118193172843852,
+    "conformal_quantile": 0.9269021153450012
+  },
+  "largest_tissue_coverage_gap_90": {
+    "subgroup_type": "tissue",
+    "subgroup_label": "Pancreas",
+    "n": 329,
+    "raw_interval_coverage_90": 0.6231003039513677,
+    "conformal_interval_coverage_90": 0.3495440729483283,
+    "raw_mean_interval_width_90": 1.678200763011051,
+    "conformal_mean_interval_width_90": 0.9822797233172469,
+    "mae": 0.7244463272134956,
+    "mean_signed_error": -0.6353690831547963,
+    "conformal_gap": -0.5504559270516718
+  },
+  "highest_potency_bin_coverage_90": {
+    "subgroup_type": "potency_bin",
+    "subgroup_label": ">7.5",
+    "n": 524,
+    "raw_interval_coverage_90": 0.5,
+    "conformal_interval_coverage_90": 0.24236641221374045,
+    "raw_mean_interval_width_90": 2.347360971752014,
+    "conformal_mean_interval_width_90": 1.4364419217665572,
+    "mae": 1.1134016908936828,
+    "mean_signed_error": -1.1131264979413449
+  }
+}

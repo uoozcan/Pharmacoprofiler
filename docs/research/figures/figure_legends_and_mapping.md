@@ -250,7 +250,7 @@ Files:
 ### Legend
 
 **Supplementary Figure S1. Interval calibration behavior of the verified legacy Random Forest baseline.**  
-Panel A compares nominal central tree-quantile coverage to empirical benchmark coverage across interval levels from 50% to 95%, showing systematic under-coverage rather than a problem confined to the nominal 90% interval alone. Panel B summarizes coverage gaps across the same levels and annotates the descriptive post hoc width-inflation factor required to recover nominal 90% coverage on the same benchmark set. Together, the panels support the manuscript-safe interpretation that the current uncertainty layer exposes a real signal but remains under-calibrated and should not yet be promoted as a deployment-ready predictive-interval method.
+Panel A compares nominal coverage to empirical coverage for both the raw tree-quantile intervals and an OOB-based split-conformal layer built from a deterministic GDSC reference partition. Panel B compares the corresponding interval-width tradeoff across nominal levels, and Panel C summarizes subgroup behavior for the 90% intervals. Together, the panels show that the repository now contains a reproducible held-out calibration workflow, but that it still under-covers the external CCLE benchmark and should not yet be promoted as a deployment-ready predictive-interval method.
 
 ### Manuscript mapping
 

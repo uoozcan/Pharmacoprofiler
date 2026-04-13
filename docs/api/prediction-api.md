@@ -64,4 +64,5 @@ or:
 - Preserve grouped prediction outputs keyed by submitted SMILES.
 - Additive metadata is allowed.
 - Future fields such as applicability scores or prediction intervals must be introduced without breaking the current response shape.
+- Any later uncertainty promotion should identify the method explicitly, for example `split_conformal`, the nominal level, and the calibration-reference provenance.
 - Missing tissue metadata should be serialized as empty string rather than raw `NaN`.
