@@ -19,6 +19,7 @@ Use `archive/legacy-manuscript-materials/` for exploratory, duplicated, or non-c
 - `legacy_benchmark_mechanism_overview.(png|svg)`: mechanism-class and target-breadth context for the benchmark-overlap drugs
 - `platform_positioning_comparison.(png|svg)`: competitive positioning heatmap derived from verified repo analysis
 - `benchmark_figure_set_note.md`: manuscript-safe messages linked to the generated benchmark figures
+- `supplementary-benchmark-captions.md`: compact manuscript-ready captions for supplementary benchmark figures, including Figures 2, 3, 4, and 10
 - `uncertainty_figure_set_note.md`: manuscript-safe messages linked to the uncertainty and applicability figures
 - `supplementary-uncertainty-captions.md`: compact manuscript-ready captions for Figures 8, 9, and Supplementary Figure S1
 - `mechanism_figure_set_note.md`: manuscript-safe messages linked to the mechanism-aware figure
