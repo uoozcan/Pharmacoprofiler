@@ -20,6 +20,7 @@ Use `archive/legacy-manuscript-materials/` for exploratory, duplicated, or non-c
 - `platform_positioning_comparison.(png|svg)`: competitive positioning heatmap derived from verified repo analysis
 - `benchmark_figure_set_note.md`: manuscript-safe messages linked to the generated benchmark figures
 - `uncertainty_figure_set_note.md`: manuscript-safe messages linked to the uncertainty and applicability figures
+- `supplementary-uncertainty-captions.md`: compact manuscript-ready captions for Figures 8, 9, and Supplementary Figure S1
 - `mechanism_figure_set_note.md`: manuscript-safe messages linked to the mechanism-aware figure
 - `figure_legends_and_mapping.md`: manuscript-ready legends and mapping from each figure to manuscript targets and reviewer concerns
 - `platform_positioning_matrix.tsv`: tracked source matrix for the strategic positioning figure
